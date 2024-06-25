@@ -1,6 +1,6 @@
 "use client";
 
-import { postClienteAction } from "@/actions/clientes/post-cliente-action";
+import { postClienteAction } from "@/actions/cliente/post-clientes-action";
 import { useState } from "react";
 
 export default function CadastrarClientePage() {
