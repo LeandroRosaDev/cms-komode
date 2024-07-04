@@ -7,7 +7,7 @@ interface ProductData {
   nome_long: string;
   cor: string;
   estrutura: string;
-  [key: string]: any; // Para permitir campos adicionais
+  [key: string]: any;
 }
 
 interface ClientProdutoPageProps {

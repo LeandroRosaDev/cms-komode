@@ -18,6 +18,11 @@ export async function loginAction(formData: FormData) {
       body: JSON.stringify(credencials),
     }
   );
+
+  if (!response.ok) {
+    throw new Error("Falha no login");
+  }
+
   const data = await response.json();
   const expirationTime = new Date();
   expirationTime.setMinutes(expirationTime.getMinutes() + 240);
@@ -26,5 +31,4 @@ export async function loginAction(formData: FormData) {
     httpOnly: true,
     expires: expirationTime,
   });
-  redirect("/");
 }

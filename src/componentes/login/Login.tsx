@@ -1,12 +1,29 @@
 "use client";
+import { useRef } from "react";
 import { loginAction } from "@/actions/login/login-action";
 import { Button } from "../form-componentes/Button";
 
 export default function Login() {
+  const formRef = useRef<HTMLFormElement>(null);
+
+  const handleSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
+    if (formRef.current) {
+      const formData = new FormData(formRef.current);
+      try {
+        await loginAction(formData);
+        window.location.reload();
+      } catch (error) {
+        console.error("Erro no login:", error);
+      }
+    }
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <form
-        action={loginAction}
+        ref={formRef}
+        onSubmit={handleSubmit}
         className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md"
       >
         <h2 className="text-2xl font-semibold text-center text-gray-700 mb-6">

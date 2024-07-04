@@ -1,3 +1,9 @@
+import GetClientes from "@/componentes/clientes/GetClientes";
+
 export default function clientesPage() {
-  return <section>Aqui serão exibidos os clientes</section>;
+  return (
+    <section>
+      <GetClientes />
+    </section>
+  );
 }

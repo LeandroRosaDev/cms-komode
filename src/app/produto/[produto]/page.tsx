@@ -2,15 +2,17 @@ import { PageParams } from "@/Types";
 import Image from "next/image";
 import { ButtonBack } from "@/componentes/helpers/ButtonBack";
 import ClientProdutoPage from "@/componentes/produtos/Put-produto";
+import tokenAction from "@/actions/login/get-token";
 
 export default async function ServerProdutoPage({ params }: PageParams) {
+  const token = await tokenAction();
+
   const response = await fetch(
     `https://apikomode.altuori.com/wp-json/api/produto/${params.produto}`,
     {
       cache: "no-store",
       headers: {
-        Authorization:
-          "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2FwaWtvbW9kZS5hbHR1b3JpLmNvbSIsImlhdCI6MTcxNTY0NDgwMCwibmJmIjoxNzE1NjQ0ODAwLCJleHAiOjI1Nzk2NDQ4MDAsImRhdGEiOnsidXNlciI6eyJpZCI6IjIifX19.tQ-Uuz58JbI2ksAdPJz-6OaBh6TUAE31jsbg84oXshQ",
+        Authorization: `Bearer ${token}`,
       },
     }
   );

@@ -12,10 +12,11 @@ export type Conta = {
 export type IUserContext = {
   user: User | null;
   setUser: React.Dispatch<React.SetStateAction<User | null>>;
+  isAuthenticated: boolean;
 };
 
 export type Produto = {
-  id?: string;
+  id: string;
   nome: string;
   nome_long: string;
   preco: string;
@@ -32,20 +33,24 @@ export type Produto = {
   assento?: string;
   encosto?: string;
   braco?: string;
-  estrutura?: string;
+  estrutura: string;
   revestimento?: string;
   estoque?: number;
   usuario_id?: string;
-  fotos?: any;
   img?: File[];
   situacao?: string;
   sub_categoria?: string;
   disponibilidade?: string;
+  preco_parcelado?: string;
+  preco_original?: string;
+  fotos: { src: string }[];
 };
 export type PageParams = {
   params: {
     produto: string;
     categorias: string;
     subcategorias: string;
+    clientes: string;
+    reclamacoes: string;
   };
 };

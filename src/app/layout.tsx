@@ -1,25 +1,28 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import "./globals.css";
 import Menu from "@/componentes/Menu";
-
-const inter = Inter({ subsets: ["latin"] });
+import { userGetAction } from "@/actions/user/user-get-action";
+import { UserContextProvider } from "@/context/user-context";
 
 export const metadata: Metadata = {
   title: "Komode CMS",
   description: "Este é um CMS para Komode Móveis",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const { data: user } = await userGetAction();
+
   return (
     <html lang="pt-br">
-      <body className={inter.className}>
-        <Menu />
-        {children}
+      <body>
+        <UserContextProvider user={user}>
+          <Menu />
+          {children}
+        </UserContextProvider>
       </body>
     </html>
   );

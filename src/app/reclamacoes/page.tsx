@@ -1,7 +1,9 @@
-export default function reclamacoesPage() {
+import GetReclamacao from "@/componentes/reclamacoes/GetReclamacao";
+
+export default function clientesPage() {
   return (
     <section>
-      <h1>Aqui serão exibidas as reclamações dos clientes la do site</h1>
+      <GetReclamacao />
     </section>
   );
 }
