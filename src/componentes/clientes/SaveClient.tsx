@@ -188,7 +188,7 @@ export default function SaveClient({ cliente }) {
           </div>
           <div class="grid grid-cols-2 gap-4 text-sm font-bold mb-6 mt-[100px]">
             <div>
-              <h1>Data: {cliente.data} 28/06/2024</h1>
+              <h1>Data: {cliente.data} 30/07/2024</h1>
               <h1>Nome: {cliente.nome}</h1>
               <h1>Numero da nota: 394</h1>
               <h1>
