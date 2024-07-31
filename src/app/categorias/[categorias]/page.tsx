@@ -56,22 +56,45 @@ const CategoriasPage = ({ params }: PageParams) => {
       <p className="text-center text-3xl mt-4">Ocorreu um erro: {error}</p>
     );
 
-  const handleDelete = async (produtoId: string) => {
-    await deleteProdutosAction(produtoId);
-    setProdutos(produtos.filter((produto) => produto.id !== produtoId));
+  const formatPrice = (value: number) => {
+    if (isNaN(value)) return "R$ 0,00";
+    const formattedValue = value.toFixed(2).replace(".", ",");
+    return `R$ ${formattedValue}`;
   };
 
-  const handleUpdate = async (
+  const cleanPriceInput = (input: string) => {
+    return parseFloat(input.replace(/[^\d,]/g, "").replace(",", "."));
+  };
+
+  const handleBlur = async (
     produtoId: string,
     field: string,
     value: string
   ) => {
     const updatedProduct = produtos.find((produto) => produto.id === produtoId);
     if (updatedProduct) {
-      (updatedProduct as any)[field] = value;
+      if (field === "preco") {
+        const preco = cleanPriceInput(value);
+        if (isNaN(preco)) {
+          updatedProduct.preco = "R$ 0,00";
+          updatedProduct.preco_original = "R$ 0,00";
+          updatedProduct.preco_parcelado = "R$ 0,00";
+        } else {
+          updatedProduct.preco = formatPrice(preco);
+          updatedProduct.preco_original = formatPrice(preco * 1.1);
+          updatedProduct.preco_parcelado = formatPrice(preco / 10);
+        }
+      } else {
+        (updatedProduct as any)[field] = value;
+      }
       await putProdutosAction(updatedProduct, produtoId);
       setProdutos([...produtos]);
     }
+  };
+
+  const handleDelete = async (produtoId: string) => {
+    await deleteProdutosAction(produtoId);
+    setProdutos(produtos.filter((produto) => produto.id !== produtoId));
   };
 
   return (
@@ -90,7 +113,7 @@ const CategoriasPage = ({ params }: PageParams) => {
                 <Link href={`/produto/${produto.id}`} className="w-72">
                   <Image
                     className="opacity-100 block w-auto h-auto transition-opacity duration-500 ease-in-out hover:opacity-30"
-                    src={produto.fotos[1].src}
+                    src={produto.fotos[0].src}
                     alt={`Imagem de ${produto.nome}`}
                     width={300}
                     height={250}
@@ -108,23 +131,21 @@ const CategoriasPage = ({ params }: PageParams) => {
                 <h1 className="text-center text-base m-0">
                   {produto?.preco_parcelado}
                 </h1>
-
                 <h1 className="text-center text-base m-0">
                   {produto?.preco_original}
                 </h1>
-
                 <input
                   type="text"
-                  value={produto?.preco}
-                  onChange={(e) =>
-                    handleUpdate(produto.id, "preco", e.target.value)
+                  defaultValue={produto?.preco}
+                  onBlur={(e) =>
+                    handleBlur(produto.id, "preco", e.target.value)
                   }
                   className="border mb-1 border-gray-300 w-full p-1 rounded-md bg-gray-100 transition duration-200 focus:outline-none focus:border-red-500 focus:bg-white focus:shadow-outline"
                 />
                 <select
                   value={produto?.situacao}
                   onChange={(e) =>
-                    handleUpdate(produto.id, "situacao", e.target.value)
+                    handleBlur(produto.id, "situacao", e.target.value)
                   }
                   className="border border-gray-300 w-full p-1 rounded-md bg-gray-100 transition duration-200 focus:outline-none focus:border-red-500 focus:bg-white focus:shadow-outline"
                 >
@@ -148,7 +169,7 @@ const CategoriasPage = ({ params }: PageParams) => {
                       value="sim"
                       checked={produto?.disponibilidade === "sim"}
                       onChange={(e) =>
-                        handleUpdate(
+                        handleBlur(
                           produto.id,
                           "disponibilidade",
                           e.target.value
@@ -165,7 +186,7 @@ const CategoriasPage = ({ params }: PageParams) => {
                       value="nao"
                       checked={produto?.disponibilidade === "nao"}
                       onChange={(e) =>
-                        handleUpdate(
+                        handleBlur(
                           produto.id,
                           "disponibilidade",
                           e.target.value
@@ -177,7 +198,7 @@ const CategoriasPage = ({ params }: PageParams) => {
                   </label>
                 </div>
                 <button
-                  className="bg-red-700 hidden text-white py-2 px-4 mt-2 rounded"
+                  className="bg-red-700 text-white py-2 px-4 mt-2 rounded"
                   onClick={() => handleDelete(produto.id)}
                 >
                   Deletar

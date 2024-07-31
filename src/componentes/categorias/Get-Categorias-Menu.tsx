@@ -28,7 +28,7 @@ export default function GetCategoriasMenu() {
       "Colchão de Solteiro",
       "Guarda Roupa Solteiro",
     ],
-    Cozinha: ["Balcão de cozinha", "Mesa de aluminio", "Kit Cozinha"],
+    Cozinha: ["Balcao de cozinha", "Mesa de aluminio", "Kit de Cozinha"],
     Lavanderia: ["Multiuso"],
     Escritorio: ["Escrivaninha", "Estante de Livros"],
   };

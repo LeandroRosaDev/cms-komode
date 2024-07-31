@@ -33,9 +33,9 @@ export default function CadastrarClientePage() {
   };
 
   return (
-    <section className="p-6 bg-gray-100 min-h-screen">
-      <div className="bg-white p-6 rounded-lg shadow-lg max-w-md mx-auto">
-        <h1 className="text-2xl font-semibold text-center text-gray-700 mb-6">
+    <section className="p-4 sm:p-6 bg-gray-100 min-h-screen">
+      <div className="bg-white p-4 sm:p-6 rounded-lg shadow-lg max-w-md mx-auto">
+        <h1 className="text-xl sm:text-2xl font-semibold text-center text-gray-700 mb-4 sm:mb-6">
           Cadastrar Cliente
         </h1>
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -49,7 +49,7 @@ export default function CadastrarClientePage() {
               name="nome"
               value={nome}
               onChange={(e) => setNome(e.target.value)}
-              className="border border-gray-300 w-full p-3 rounded-md bg-gray-100 transition duration-200 focus:outline-none focus:border-red-500 focus:bg-white focus:shadow-outline"
+              className="border border-gray-300 w-full p-2 sm:p-3 rounded-md bg-gray-100 transition duration-200 focus:outline-none focus:border-red-500 focus:bg-white focus:shadow-outline"
               required
             />
           </div>
@@ -63,7 +63,7 @@ export default function CadastrarClientePage() {
               name="nomeRecebedor"
               value={nomeRecebedor}
               onChange={(e) => setNomeRecebedor(e.target.value)}
-              className="border border-gray-300 w-full p-3 rounded-md bg-gray-100 transition duration-200 focus:outline-none focus:border-red-500 focus:bg-white focus:shadow-outline"
+              className="border border-gray-300 w-full p-2 sm:p-3 rounded-md bg-gray-100 transition duration-200 focus:outline-none focus:border-red-500 focus:bg-white focus:shadow-outline"
               required
             />
           </div>
@@ -77,7 +77,7 @@ export default function CadastrarClientePage() {
               name="endereco"
               value={endereco}
               onChange={(e) => setEndereco(e.target.value)}
-              className="border border-gray-300 w-full p-3 rounded-md bg-gray-100 transition duration-200 focus:outline-none focus:border-red-500 focus:bg-white focus:shadow-outline"
+              className="border border-gray-300 w-full p-2 sm:p-3 rounded-md bg-gray-100 transition duration-200 focus:outline-none focus:border-red-500 focus:bg-white focus:shadow-outline"
               required
             />
           </div>
@@ -91,7 +91,7 @@ export default function CadastrarClientePage() {
               name="cidade"
               value={cidade}
               onChange={(e) => setCidade(e.target.value)}
-              className="border border-gray-300 w-full p-3 rounded-md bg-gray-100 transition duration-200 focus:outline-none focus:border-red-500 focus:bg-white focus:shadow-outline"
+              className="border border-gray-300 w-full p-2 sm:p-3 rounded-md bg-gray-100 transition duration-200 focus:outline-none focus:border-red-500 focus:bg-white focus:shadow-outline"
               required
             />
           </div>
@@ -105,7 +105,7 @@ export default function CadastrarClientePage() {
               name="estado"
               value={estado}
               onChange={(e) => setEstado(e.target.value)}
-              className="border border-gray-300 w-full p-3 rounded-md bg-gray-100 transition duration-200 focus:outline-none focus:border-red-500 focus:bg-white focus:shadow-outline"
+              className="border border-gray-300 w-full p-2 sm:p-3 rounded-md bg-gray-100 transition duration-200 focus:outline-none focus:border-red-500 focus:bg-white focus:shadow-outline"
               required
             />
           </div>
@@ -119,7 +119,7 @@ export default function CadastrarClientePage() {
               name="telefone1"
               value={telefone1}
               onChange={(e) => setTelefone1(e.target.value)}
-              className="border border-gray-300 w-full p-3 rounded-md bg-gray-100 transition duration-200 focus:outline-none focus:border-red-500 focus:bg-white focus:shadow-outline"
+              className="border border-gray-300 w-full p-2 sm:p-3 rounded-md bg-gray-100 transition duration-200 focus:outline-none focus:border-red-500 focus:bg-white focus:shadow-outline"
               required
             />
           </div>
@@ -133,7 +133,7 @@ export default function CadastrarClientePage() {
               name="telefone2"
               value={telefone2}
               onChange={(e) => setTelefone2(e.target.value)}
-              className="border border-gray-300 w-full p-3 rounded-md bg-gray-100 transition duration-200 focus:outline-none focus:border-red-500 focus:bg-white focus:shadow-outline"
+              className="border border-gray-300 w-full p-2 sm:p-3 rounded-md bg-gray-100 transition duration-200 focus:outline-none focus:border-red-500 focus:bg-white focus:shadow-outline"
             />
           </div>
           <div>
@@ -146,7 +146,7 @@ export default function CadastrarClientePage() {
               name="pontoReferencia"
               value={pontoReferencia}
               onChange={(e) => setPontoReferencia(e.target.value)}
-              className="border border-gray-300 w-full p-3 rounded-md bg-gray-100 transition duration-200 focus:outline-none focus:border-red-500 focus:bg-white focus:shadow-outline"
+              className="border border-gray-300 w-full p-2 sm:p-3 rounded-md bg-gray-100 transition duration-200 focus:outline-none focus:border-red-500 focus:bg-white focus:shadow-outline"
             />
           </div>
           <div>
@@ -159,7 +159,7 @@ export default function CadastrarClientePage() {
               name="formaPagamento"
               value={formaPagamento}
               onChange={(e) => setFormaPagamento(e.target.value)}
-              className="border border-gray-300 w-full p-3 rounded-md bg-gray-100 transition duration-200 focus:outline-none focus:border-red-500 focus:bg-white focus:shadow-outline"
+              className="border border-gray-300 w-full p-2 sm:p-3 rounded-md bg-gray-100 transition duration-200 focus:outline-none focus:border-red-500 focus:bg-white focus:shadow-outline"
               required
             />
           </div>
@@ -172,7 +172,7 @@ export default function CadastrarClientePage() {
               name="observacoes"
               value={observacoes}
               onChange={(e) => setObservacoes(e.target.value)}
-              className="border border-gray-300 w-full p-3 rounded-md bg-gray-100 transition duration-200 focus:outline-none focus:border-red-500 focus:bg-white focus:shadow-outline"
+              className="border border-gray-300 w-full p-2 sm:p-3 rounded-md bg-gray-100 transition duration-200 focus:outline-none focus:border-red-500 focus:bg-white focus:shadow-outline"
             />
           </div>
           <button

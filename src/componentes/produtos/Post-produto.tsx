@@ -1,3 +1,4 @@
+//@ts-nocheck
 "use client";
 import { postProdutosAction } from "@/actions/produtos/post-produtos-action";
 import { useState } from "react";
@@ -8,6 +9,21 @@ export default function PostProduto() {
   const [rangedevalor, setRangedevalor] = useState("");
   const [categoriaSelecionada, setCategoriaSelecionada] = useState("");
   const [subcategoriaSelecionada, setsubCategoriaSelecionada] = useState("");
+  const [preco, setPreco] = useState(0);
+  const [nome, setNome] = useState("");
+  const [produtoCod, setProdutoCod] = useState("");
+  const [cor, setCor] = useState("");
+
+  const formatPrice = (value) => {
+    const formattedValue = value.toFixed(2).replace(".", ",");
+    return `R$ ${formattedValue}`;
+  };
+
+  const precoParcelado = formatPrice(preco / 10);
+  const precoOriginal = formatPrice(preco * 1.1);
+  const precoFormatted = formatPrice(preco);
+
+  const link_1 = `//api.whatsapp.com/send?phone=5521978991540&text=Olá tudo bem? Eu estava olhando o site de vocês e gostaria de mais informações sobre o produto ${nome} ${produtoCod} ${cor}, poderia me passar mais informações sobre?`;
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -17,46 +33,53 @@ export default function PostProduto() {
     for (let i = 0; i < imagens.length; i++) {
       formData.append(imagens[i].name, imagens[i]);
     }
-    formData.append("nome", event.currentTarget.nome.value);
-    formData.append("nome_long", event.currentTarget.nome_long.value);
-    formData.append("produto_cod", event.currentTarget.produto_cod.value);
-    formData.append("situacao", situacao);
-    formData.append("rangedevalor", rangedevalor);
-    formData.append("categoria", categoriaSelecionada);
-    formData.append("sub_categoria", subcategoriaSelecionada);
-    formData.append("descricao", event.currentTarget.descricao.value);
-    formData.append("preco", event.currentTarget.preco.value);
-    formData.append("preco_original", event.currentTarget.preco_original.value);
-    formData.append(
-      "preco_parcelado",
-      event.currentTarget.preco_parcelado.value
-    );
-    formData.append("altura", event.currentTarget.altura.value);
-    formData.append("largura", event.currentTarget.largura.value);
-    formData.append("cor", event.currentTarget.cor.value);
-    formData.append("link_1", event.currentTarget.link_1.value);
-    formData.append("link_2", event.currentTarget.link_2.value);
+
+    // Garantir que todos os campos de formulário necessários estão presentes
+    formData.append("nome", nome || "");
+    formData.append("nome_long", event.currentTarget.nome_long?.value || "");
+    formData.append("produto_cod", produtoCod || "");
+    formData.append("situacao", situacao || "");
+    formData.append("rangedevalor", rangedevalor || "");
+    formData.append("categoria", categoriaSelecionada || "");
+    formData.append("sub_categoria", subcategoriaSelecionada || "");
+    formData.append("descricao", event.currentTarget.descricao?.value || "");
+    formData.append("preco", precoFormatted);
+    formData.append("preco_original", precoOriginal);
+    formData.append("preco_parcelado", precoParcelado);
+    formData.append("altura", event.currentTarget.altura?.value || "");
+    formData.append("largura", event.currentTarget.largura?.value || "");
+    formData.append("cor", cor || "");
+    formData.append("link_1", link_1);
+    formData.append("link_2", event.currentTarget.link_2?.value || "");
     formData.append(
       "disponibilidade",
-      event.currentTarget.disponibilidade.value
+      event.currentTarget.disponibilidade?.value || ""
     );
     formData.append(
       "profundidade_aberto",
-      event.currentTarget.profundidade_aberto.value
+      event.currentTarget.profundidade_aberto?.value || ""
     );
-    formData.append("estrutura", event.currentTarget.estrutura.value);
+    formData.append("estrutura", event.currentTarget.estrutura?.value || "");
 
-    if (subcategoriaSelecionada == "Sofa Retratil") {
-      formData.append("assento", event.currentTarget.assento.value);
-      formData.append("encosto", event.currentTarget.encosto.value);
-      formData.append("braco", event.currentTarget.braco.value);
-      formData.append("revestimento", event.currentTarget.revestimento.value);
+    if (subcategoriaSelecionada === "Sofa Retratil") {
+      formData.append("assento", event.currentTarget.assento?.value || "");
+      formData.append("encosto", event.currentTarget.encosto?.value || "");
+      formData.append("braco", event.currentTarget.braco?.value || "");
+      formData.append(
+        "revestimento",
+        event.currentTarget.revestimento?.value || ""
+      );
       formData.append(
         "profundidade_fechado",
-        event.currentTarget.profundidade_fechado.value
+        event.currentTarget.profundidade_fechado?.value || ""
       );
     }
-    await postProdutosAction(formData);
+
+    try {
+      await postProdutosAction(formData);
+    } catch (error) {
+      console.error("Erro ao enviar o formulário:", error);
+    }
   }
 
   return (
@@ -67,6 +90,8 @@ export default function PostProduto() {
           id="nome"
           name="nome"
           placeholder="Nome do produto"
+          value={nome}
+          onChange={(e) => setNome(e.target.value)}
           className="border border-gray-300 w-full max-w-lg p-3 rounded-md bg-gray-100 transition duration-200 mb-4 focus:outline-none focus:border-red-500 focus:bg-white focus:shadow-outline"
         />
         <input
@@ -81,6 +106,8 @@ export default function PostProduto() {
           id="produto_cod"
           name="produto_cod"
           placeholder="Código do Produto"
+          value={produtoCod}
+          onChange={(e) => setProdutoCod(e.target.value)}
           className="border border-gray-300 w-full max-w-lg p-3 rounded-md bg-gray-100 transition duration-200 mb-4 focus:outline-none focus:border-red-500 focus:bg-white focus:shadow-outline"
         />
         <select
@@ -119,7 +146,7 @@ export default function PostProduto() {
           className="border border-gray-300 w-full max-w-lg p-3 rounded-md bg-gray-100 transition duration-200 mb-4 focus:outline-none focus:border-red-500 focus:bg-white focus:shadow-outline"
         >
           <option value="">Sub Categoria</option>
-          {categoriaSelecionada == "Sala de estar" && (
+          {categoriaSelecionada === "Sala de estar" && (
             <>
               <option value="Sofa Retratil">Sofá Retrátil</option>
               <option value="Sofa Canto">Sofá de Canto</option>
@@ -130,19 +157,19 @@ export default function PostProduto() {
               <option value="Mesa de jantar">Mesa de Jantar</option>
             </>
           )}
-          {categoriaSelecionada == "Cozinha" && (
+          {categoriaSelecionada === "Cozinha" && (
             <>
               <option value="Balcao de Cozinha">Balcão de cozinha</option>
               <option value="Mesa de aluminio">Mesa de aluminio</option>
               <option value="Kit de cozinha">Kit Cozinha</option>
             </>
           )}
-          {categoriaSelecionada == "Banheiro" && (
+          {categoriaSelecionada === "Banheiro" && (
             <>
               <option value="Armario de banheiro">Armário de Banheiro</option>
             </>
           )}
-          {categoriaSelecionada == "Quarto de casal" && (
+          {categoriaSelecionada === "Quarto de casal" && (
             <>
               <option value="Cama de Casal">Cama de Casal</option>
               <option value="Guarda Roupa Casal">Guarda Roupa Casal</option>
@@ -150,7 +177,7 @@ export default function PostProduto() {
               <option value="Colchão de Casal">Colchão de Casal</option>
             </>
           )}
-          {categoriaSelecionada == "Quarto de solteiro" && (
+          {categoriaSelecionada === "Quarto de solteiro" && (
             <>
               <option value="Cama de Solteiro">Cama de Solteiro</option>
               <option value="Base de Solteiro">Base de Solteiro</option>
@@ -160,13 +187,13 @@ export default function PostProduto() {
               </option>
             </>
           )}
-          {categoriaSelecionada == "Escritório" && (
+          {categoriaSelecionada === "Escritório" && (
             <>
               <option value="Escrivaninha">Escrivaninha</option>
               <option value="Estante de livros">Estante de Livros</option>
             </>
           )}
-          {categoriaSelecionada == "Lavanderia" && (
+          {categoriaSelecionada === "Lavanderia" && (
             <>
               <option value="Multiuso">Multiuso</option>
             </>
@@ -204,25 +231,25 @@ export default function PostProduto() {
           <option value="4999">Menor de R$5000,00</option>
         </select>
         <input
-          type="text"
+          type="number"
           id="preco"
           name="preco"
           placeholder="Preço"
+          value={preco}
+          onChange={(e) => setPreco(parseFloat(e.target.value) || 0)}
           className="border border-gray-300 w-full max-w-lg p-3 rounded-md bg-gray-100 transition duration-200 mb-4 focus:outline-none focus:border-red-500 focus:bg-white focus:shadow-outline"
         />
         <input
-          type="text"
+          type="hidden"
           id="preco_original"
           name="preco_original"
-          placeholder="Preço Riscado"
-          className="border border-gray-300 w-full max-w-lg p-3 rounded-md bg-gray-100 transition duration-200 mb-4 focus:outline-none focus:border-red-500 focus:bg-white focus:shadow-outline"
+          value={precoOriginal}
         />
         <input
-          type="text"
+          type="hidden"
           id="preco_parcelado"
           name="preco_parcelado"
-          placeholder="Preço em 10x"
-          className="border border-gray-300 w-full max-w-lg p-3 rounded-md bg-gray-100 transition duration-200 mb-4 focus:outline-none focus:border-red-500 focus:bg-white focus:shadow-outline"
+          value={precoParcelado}
         />
         <input
           type="text"
@@ -238,16 +265,11 @@ export default function PostProduto() {
           placeholder="Largura"
           className="border border-gray-300 w-full max-w-lg p-3 rounded-md bg-gray-100 transition duration-200 mb-4 focus:outline-none focus:border-red-500 focus:bg-white focus:shadow-outline"
         />
-        <input
-          type="text"
-          id="estrutura"
-          name="estrutura"
-          placeholder="Estrutura/Características"
-          className="border border-gray-300 w-full max-w-lg p-3 rounded-md bg-gray-100 transition duration-200 mb-4 focus:outline-none focus:border-red-500 focus:bg-white focus:shadow-outline"
-        />
         <select
           id="cor"
           name="cor"
+          value={cor}
+          onChange={(e) => setCor(e.target.value)}
           className="border border-gray-300 w-full max-w-lg p-3 rounded-md bg-gray-100 transition duration-200 mb-4 focus:outline-none focus:border-red-500 focus:bg-white focus:shadow-outline"
         >
           <option value="">Cor</option>
@@ -271,21 +293,15 @@ export default function PostProduto() {
           <option value="Cinza/Grafite">Cinza/Grafite</option>
           <option value="Mel">Mel</option>
         </select>
+        <input type="hidden" id="link_1" name="link_1" value={link_1} />
         <input
-          type="text"
-          id="link_1"
-          name="link_1"
-          placeholder="Whatsapp Link"
-          className="border border-gray-300 w-full max-w-lg p-3 rounded-md bg-gray-100 transition duration-200 mb-4 focus:outline-none focus:border-red-500 focus:bg-white focus:shadow-outline"
-        />
-        <input
-          type="text"
+          type="hidden"
           id="link_2"
           name="link_2"
           placeholder="Link Opcional"
           className="border border-gray-300 w-full max-w-lg p-3 rounded-md bg-gray-100 transition duration-200 mb-4 focus:outline-none focus:border-red-500 focus:bg-white focus:shadow-outline"
         />
-        {subcategoriaSelecionada == "Sofa Retratil" && (
+        {subcategoriaSelecionada === "Sofa Retratil" && (
           <>
             <input
               type="text"
