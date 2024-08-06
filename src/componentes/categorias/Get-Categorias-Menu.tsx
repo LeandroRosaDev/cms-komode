@@ -9,8 +9,9 @@ export default function GetCategoriasMenu() {
   const categories: any = {
     "Sala de Estar": [
       "Sofá Retrátil",
-      "Sofá de Canto",
-      "Sofá de 2 e 3 lugares",
+      "Sofa Canto",
+      "Poltronas",
+      "Sofa 2 e 3 lugares",
       "Estante",
       "Painel",
       "Armário",

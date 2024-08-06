@@ -151,6 +151,7 @@ export default function PostProduto() {
               <option value="Sofa Retratil">Sofá Retrátil</option>
               <option value="Sofa Canto">Sofá de Canto</option>
               <option value="Sofa 2 e 3 lugares">Sofá de 2 e 3 lugares</option>
+              <option value="Poltronas">Poltronas</option>
               <option value="Estante">Estante</option>
               <option value="Painel">Painel</option>
               <option value="Armario">Armário</option>
