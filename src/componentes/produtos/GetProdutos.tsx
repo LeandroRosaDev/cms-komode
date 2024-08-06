@@ -7,6 +7,7 @@ import { deleteProdutosAction } from "@/actions/produtos/delete-produtos-action"
 import { putProdutosAction } from "@/actions/produtos/put-produtos-action";
 import tokenAction from "@/actions/login/get-token";
 import { url } from "@/app/api";
+import PesquisaProdutos from "@/componentes/categorias/PesquisaProdutos";
 
 const GetProdutoPromocao = () => {
   const [produtos, setProdutos] = useState([]);
@@ -14,13 +15,14 @@ const GetProdutoPromocao = () => {
   const [error, setError] = useState<string | null>(null);
   const [situacao, setSituacao] = useState<string>("");
   const [disponibilidade, setDisponibilidade] = useState<string>("sim");
+  const [searchTerm, setSearchTerm] = useState<string>("");
 
   useEffect(() => {
     const fetchProdutos = async () => {
       setLoading(true);
       setError(null);
       const token = await tokenAction();
-      const urlRequisicao = `${url}/wp-json/api/produto?situacao=${situacao}&disponibilidade=${disponibilidade}&_limit=128`;
+      const urlRequisicao = `${url}/wp-json/api/produto?situacao=${situacao}&disponibilidade=${disponibilidade}&_limit=128&q=${searchTerm}`;
 
       try {
         const response = await fetch(urlRequisicao, {
@@ -51,7 +53,7 @@ const GetProdutoPromocao = () => {
     };
 
     fetchProdutos();
-  }, [situacao, disponibilidade]);
+  }, [situacao, disponibilidade, searchTerm]);
 
   if (loading) return <p>Carregando...</p>;
   if (error) return <p className="text-center text-3xl mt-4 mb-20">{error}</p>;
@@ -83,7 +85,7 @@ const GetProdutoPromocao = () => {
         <select
           value={situacao}
           onChange={(e) => setSituacao(e.target.value)}
-          className="border border-gray-300 p-2 rounded-md bg-gray-100 transition duration-200 focus:outline-none focus:border-red-500 focus:bg-white focus:shadow-outline w-72"
+          className="border border-gray-300 p-2 rounded-md bg-gray-100 transition duration-200 focus:outline-none focus:border-red-500 focus:bg-white focus:shadow-outline w-80"
         >
           <option value="">Selecione</option>
           <option value="promocao">Promoção</option>
@@ -93,11 +95,12 @@ const GetProdutoPromocao = () => {
         <select
           value={disponibilidade}
           onChange={(e) => setDisponibilidade(e.target.value)}
-          className="border border-gray-300 p-2 rounded-md bg-gray-100 transition duration-200 focus:outline-none focus:border-red-500 focus:bg-white focus:shadow-outline w-72"
+          className="border border-gray-300 p-2 rounded-md bg-gray-100 transition duration-200 focus:outline-none focus:border-red-500 focus:bg-white focus:shadow-outline w-80"
         >
           <option value="sim">Disponível</option>
           <option value="nao">Indisponível</option>
         </select>
+        <PesquisaProdutos onSearch={(term) => setSearchTerm(term)} />
       </div>
 
       <section className="flex flex-wrap justify-center items-center gap-4 mx-auto my-8 max-w-screen-xl px-4">
