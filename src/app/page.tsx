@@ -1,7 +1,9 @@
+import GetProdutoPromocao from "@/componentes/produtos/GetProdutos";
+
 export default function Home() {
   return (
     <main>
-      <h1>Olá mundo</h1>
+      <GetProdutoPromocao />
     </main>
   );
 }

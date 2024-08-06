@@ -1,11 +1,12 @@
 "use server";
 import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
+import { url } from "@/app/api";
 
 export async function postProdutosAction(formData: FormData) {
   const token = cookies().get("token")?.value;
   const response = await fetch(
-    "https://apikomode.altuori.com/wp-json/api/produto",
+    url + "wp-json/api/produto",
 
     {
       next: {

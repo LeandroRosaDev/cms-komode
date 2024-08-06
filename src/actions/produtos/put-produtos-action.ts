@@ -1,6 +1,7 @@
 "use server";
 import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
+import { url } from "@/app/api";
 
 interface ProductData {
   id: string;
@@ -16,20 +17,17 @@ export async function putProdutosAction(
 ) {
   const token = cookies().get("token")?.value;
 
-  const response = await fetch(
-    `https://apikomode.altuori.com/wp-json/api/produto/${productId}`,
-    {
-      next: {
-        revalidate: 1,
-      },
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + token,
-      },
-      body: JSON.stringify(productData),
-    }
-  );
+  const response = await fetch(url + `wp-json/api/produto/${productId}`, {
+    next: {
+      revalidate: 1,
+    },
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + token,
+    },
+    body: JSON.stringify(productData),
+  });
 
   if (!response.ok) {
     throw new Error("Failed to update product");
