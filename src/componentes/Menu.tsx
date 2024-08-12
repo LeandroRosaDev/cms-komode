@@ -37,7 +37,7 @@ export default function Menu() {
                 className="flex items-center gap-1 text-white hover:scale-105 duration-300 text-lg mr-8"
               >
                 <Image
-                  src="/assets/icons/10.svg"
+                  src="assets/icons/10.svg"
                   alt="logotipo"
                   width={20}
                   height={20}
@@ -75,7 +75,7 @@ export default function Menu() {
                   className="flex items-center gap-1 text-white hover:scale-105 duration-300 px-5 text-lg"
                 >
                   <Image
-                    src="/assets/icons/11.svg"
+                    src="assets/icons/11.svg"
                     alt="logotipo"
                     width={20}
                     height={20}
@@ -90,7 +90,7 @@ export default function Menu() {
                       onClick={closeMenu}
                     >
                       <Image
-                        src="/assets/icons/13.svg"
+                        src="assets/icons/13.svg"
                         alt="logotipo"
                         width={20}
                         height={20}
@@ -105,7 +105,7 @@ export default function Menu() {
                       onClick={closeMenu}
                     >
                       <Image
-                        src="/assets/icons/12.svg"
+                        src="assets/icons/12.svg"
                         alt="logotipo"
                         width={20}
                         height={20}
@@ -121,7 +121,7 @@ export default function Menu() {
                   className="flex items-center gap-1 text-white hover:scale-105 duration-300 px-5 text-lg"
                 >
                   <Image
-                    src="/assets/icons/14.svg"
+                    src="assets/icons/14.svg"
                     alt="logotipo"
                     width={20}
                     height={20}
@@ -136,7 +136,7 @@ export default function Menu() {
                       onClick={closeMenu}
                     >
                       <Image
-                        src="/assets/icons/15.svg"
+                        src="assets/icons/15.svg"
                         alt="logotipo"
                         width={20}
                         height={20}
@@ -151,7 +151,7 @@ export default function Menu() {
                       onClick={closeMenu}
                     >
                       <Image
-                        src="/assets/icons/16.svg"
+                        src="assets/icons/16.svg"
                         alt="logotipo"
                         width={20}
                         height={20}
@@ -166,7 +166,7 @@ export default function Menu() {
                       onClick={closeMenu}
                     >
                       <Image
-                        src="/assets/icons/17.svg"
+                        src="assets/icons/17.svg"
                         alt="logotipo"
                         width={20}
                         height={20}
@@ -212,7 +212,7 @@ export default function Menu() {
                 <li>
                   <button className=" w-full text-white flex items-center gap-2 uppercase">
                     <Image
-                      src="/assets/icons/10.svg"
+                      src="assets/icons/10.svg"
                       alt="logotipo"
                       width={20}
                       height={20}
@@ -232,7 +232,7 @@ export default function Menu() {
                     onClick={toggleProducts}
                   >
                     <Image
-                      src="/assets/icons/11.svg"
+                      src="assets/icons/11.svg"
                       alt="logotipo"
                       width={20}
                       height={20}
@@ -248,7 +248,7 @@ export default function Menu() {
                           onClick={closeMenu}
                         >
                           <Image
-                            src="/assets/icons/13.svg"
+                            src="assets/icons/13.svg"
                             alt="logotipo"
                             width={20}
                             height={20}
@@ -263,7 +263,7 @@ export default function Menu() {
                           onClick={closeMenu}
                         >
                           <Image
-                            src="/assets/icons/12.svg"
+                            src="assets/icons/12.svg"
                             alt="logotipo"
                             width={20}
                             height={20}
@@ -280,7 +280,7 @@ export default function Menu() {
                     onClick={toggleClients}
                   >
                     <Image
-                      src="/assets/icons/14.svg"
+                      src="assets/icons/14.svg"
                       alt="logotipo"
                       width={20}
                       height={20}
@@ -296,7 +296,7 @@ export default function Menu() {
                           onClick={closeMenu}
                         >
                           <Image
-                            src="/assets/icons/15.svg"
+                            src="assets/icons/15.svg"
                             alt="logotipo"
                             width={20}
                             height={20}
@@ -311,7 +311,7 @@ export default function Menu() {
                           onClick={closeMenu}
                         >
                           <Image
-                            src="/assets/icons/16.svg"
+                            src="assets/icons/16.svg"
                             alt="logotipo"
                             width={20}
                             height={20}
@@ -326,7 +326,7 @@ export default function Menu() {
                           onClick={closeMenu}
                         >
                           <Image
-                            src="/assets/icons/17.svg"
+                            src="assets/icons/17.svg"
                             alt="logotipo"
                             width={20}
                             height={20}
