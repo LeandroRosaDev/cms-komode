@@ -13,7 +13,7 @@ const GetProdutoPromocao = () => {
   const [produtos, setProdutos] = useState([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [situacao, setSituacao] = useState<string>("");
+  const [situacao, setSituacao] = useState<string>("promocao");
   const [disponibilidade, setDisponibilidade] = useState<string>("sim");
   const [searchTerm, setSearchTerm] = useState<string>("");
 
@@ -58,27 +58,50 @@ const GetProdutoPromocao = () => {
   if (loading) return <p>Carregando...</p>;
   if (error) return <p className="text-center text-3xl mt-4 mb-20">{error}</p>;
 
-  const handleDelete = async (produtoId: string) => {
-    await deleteProdutosAction(produtoId);
-    setProdutos(produtos.filter((produto) => produto.id !== produtoId));
+  const formatPrice = (value: number) => {
+    if (isNaN(value)) return "R$ 0,00";
+    const formattedValue = value.toFixed(2).replace(".", ",");
+    return `R$ ${formattedValue}`;
   };
 
-  const handleUpdate = async (
+  const cleanPriceInput = (input: string) => {
+    return parseFloat(input.replace(/[^\d,]/g, "").replace(",", "."));
+  };
+
+  const handleBlur = async (
     produtoId: string,
     field: string,
     value: string
   ) => {
     const updatedProduct = produtos.find((produto) => produto.id === produtoId);
     if (updatedProduct) {
-      (updatedProduct as any)[field] = value;
+      if (field === "preco") {
+        const preco = cleanPriceInput(value);
+        if (isNaN(preco)) {
+          updatedProduct.preco = "R$ 0,00";
+          updatedProduct.preco_original = "R$ 0,00";
+          updatedProduct.preco_parcelado = "R$ 0,00";
+        } else {
+          updatedProduct.preco = formatPrice(preco);
+          updatedProduct.preco_original = formatPrice(preco * 1.1);
+          updatedProduct.preco_parcelado = formatPrice(preco / 10);
+        }
+      } else {
+        (updatedProduct as any)[field] = value;
+      }
       await putProdutosAction(updatedProduct, produtoId);
       setProdutos([...produtos]);
     }
   };
 
+  const handleDelete = async (produtoId: string) => {
+    await deleteProdutosAction(produtoId);
+    setProdutos(produtos.filter((produto) => produto.id !== produtoId));
+  };
+
   return (
-    <div>
-      <div className="flex flex-col justify-start items-center my-4 gap-2 bg-slate-100 mx-auto shadow-sm p-2 max-w-96 text-center">
+    <section className="p-1">
+      <div className="flex flex-col justify-start items-center gap-2 bg-slate-100 shadow-sm p-2 max-w-screen-lg text-center px-4 mx-auto my-8">
         <h1 className="text-2xl">
           Selecione Abaixo a situação e disponibilidade do produto
         </h1>
@@ -87,7 +110,6 @@ const GetProdutoPromocao = () => {
           onChange={(e) => setSituacao(e.target.value)}
           className="border border-gray-300 p-2 rounded-md bg-gray-100 transition duration-200 focus:outline-none focus:border-red-500 focus:bg-white focus:shadow-outline w-80"
         >
-          <option value="">Selecione</option>
           <option value="promocao">Promoção</option>
           <option value="destaque">Destaque</option>
           <option value="queima">Queima</option>
@@ -103,7 +125,7 @@ const GetProdutoPromocao = () => {
         <PesquisaProdutos onSearch={(term) => setSearchTerm(term)} />
       </div>
 
-      <section className="flex flex-wrap justify-center items-center gap-4 mx-auto my-8 max-w-screen-xl px-4">
+      <div className="flex flex-wrap justify-center items-center gap-4 mx-auto my-8 max-w-screen-xl px-4">
         {produtos.length === 0 ? (
           <p>Nenhum produto encontrado em estoque.</p>
         ) : (
@@ -136,18 +158,18 @@ const GetProdutoPromocao = () => {
                   Código: {produto?.produto_cod}
                 </h1>
                 <h1 className="text-center text-base m-0">
-                  Preço parcelado: R${produto?.preco_parcelado}
+                  Preço parcelado: {produto?.preco_parcelado}
                 </h1>
                 <h1 className="text-center text-base m-0">
-                  Preço Original: R${produto?.preco_original}
+                  Preço Original: {produto?.preco_original}
                 </h1>
                 <h1 className="text-start text-base m-0">
                   Preço Atual: R$
                   <input
                     type="text"
-                    value={produto?.preco}
-                    onChange={(e) =>
-                      handleUpdate(produto.id, "preco", e.target.value)
+                    defaultValue={produto?.preco}
+                    onBlur={(e) =>
+                      handleBlur(produto.id, "preco", e.target.value)
                     }
                     className="border mb-1 border-gray-300 w-24 ml-1 p-1 rounded-md bg-gray-100 transition duration-200 focus:outline-none focus:border-red-500 focus:bg-white focus:shadow-outline"
                   />
@@ -155,7 +177,7 @@ const GetProdutoPromocao = () => {
                 <select
                   value={produto?.situacao}
                   onChange={(e) =>
-                    handleUpdate(produto.id, "situacao", e.target.value)
+                    handleBlur(produto.id, "situacao", e.target.value)
                   }
                   className="border border-gray-300 w-full p-1 rounded-md bg-gray-100 transition duration-200 focus:outline-none focus:border-red-500 focus:bg-white focus:shadow-outline"
                 >
@@ -172,7 +194,7 @@ const GetProdutoPromocao = () => {
                       value="sim"
                       checked={produto?.disponibilidade === "sim"}
                       onChange={(e) =>
-                        handleUpdate(
+                        handleBlur(
                           produto.id,
                           "disponibilidade",
                           e.target.value
@@ -189,7 +211,7 @@ const GetProdutoPromocao = () => {
                       value="nao"
                       checked={produto?.disponibilidade === "nao"}
                       onChange={(e) =>
-                        handleUpdate(
+                        handleBlur(
                           produto.id,
                           "disponibilidade",
                           e.target.value
@@ -210,8 +232,8 @@ const GetProdutoPromocao = () => {
             </div>
           ))
         )}
-      </section>
-    </div>
+      </div>
+    </section>
   );
 };
 

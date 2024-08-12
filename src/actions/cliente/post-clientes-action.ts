@@ -19,5 +19,4 @@ export async function postClienteAction(formData: any) {
   }
 
   const data = await response.json();
-  console.log("Response data:", data); // Logging to verify response data
 }

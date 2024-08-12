@@ -21,7 +21,7 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-red-300">
+    <div className="min-h-screen flex items-center justify-center bg-red-100">
       <form
         ref={formRef}
         onSubmit={handleSubmit}

@@ -18,7 +18,7 @@ export default function GetClientes() {
   }, []);
 
   return (
-    <section className="p-4 sm:p-6 bg-gray-100 min-h-screen">
+    <section className="p-4 sm:p-6 bg-red-100 min-h-screen">
       <div className="bg-white p-4 sm:p-6 rounded-lg shadow-lg max-w-4xl mx-auto">
         <h1 className="text-xl sm:text-2xl font-semibold text-center text-gray-700 mb-4 sm:mb-6">
           Lista de Clientes
@@ -46,7 +46,7 @@ export default function GetClientes() {
                 </div>
               </div>
               <Link
-                className="mt-2 sm:mt-0 text-center bg-red-700 text-white px-4 py-2 rounded transition duration-100 hover:bg-red-600 focus:outline-none focus:shadow-outline"
+                className="mt-2 sm:mt-0 text-center bg-green-700 text-white px-4 py-2 rounded transition duration-100 hover:bg-green-600 focus:outline-none focus:shadow-outline"
                 href={`/clientes/${cliente.id}`}
               >
                 Ver Detalhes

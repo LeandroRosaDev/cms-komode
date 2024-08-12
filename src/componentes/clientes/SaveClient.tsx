@@ -49,8 +49,8 @@ export default function SaveClient({ cliente }) {
       className="flex flex-col items-center justify-center bg-white  rounded-lg  mb-6"
       id="printable-area"
     >
-      <div class="element-visible text-start font-normal text-lg p-8 flex flex-col gap-6 bg-red-700 shadow-lg rounded-3xl my-2 mx-auto max-w-[1000px]">
-        <h1 class="text-3xl font-medium text-white mb-6 text-center">
+      <div class="element-visible text-start font-normal text-lg p-8 flex flex-col gap-6 bg-red-700 shadow-lg rounded-3xl my-2 mx-auto w-[1440px]">
+        <h1 class="text-3xl font-medium text-white mb-6 text-center uppercase">
           {cliente.nome}
         </h1>
         <div class="grid grid-cols-2 gap-4">

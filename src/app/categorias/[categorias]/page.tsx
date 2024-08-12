@@ -100,7 +100,7 @@ const CategoriasPage = ({ params }: PageParams) => {
   return (
     <div>
       <PesquisaProdutos onSearch={(term) => setSearchTerm(term)} />
-      <section className="flex flex-wrap justify-center items-center gap-4 mx-auto my-8 max-w-screen-xl">
+      <section className="flex flex-wrap justify-center items-center gap-4 mx-auto my-14 max-w-screen-xl">
         {produtos.length === 0 ? (
           <p>Nenhum produto encontrado em estoque.</p>
         ) : (
@@ -112,7 +112,7 @@ const CategoriasPage = ({ params }: PageParams) => {
               {produto.fotos && produto.fotos.length > 0 && (
                 <Link href={`/produto/${produto.id}`} className="w-72">
                   <Image
-                    className="opacity-100 block w-auto h-auto transition-opacity duration-500 ease-in-out hover:opacity-30"
+                    className="opacity-100 block w-auto h-auto rounded-2xl transition-opacity duration-500 ease-in-out hover:opacity-30"
                     src={produto.fotos[0].src}
                     alt={`Imagem de ${produto.nome}`}
                     width={300}

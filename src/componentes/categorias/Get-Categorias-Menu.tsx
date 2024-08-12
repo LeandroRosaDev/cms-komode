@@ -48,9 +48,9 @@ export default function GetCategoriasMenu() {
           <li key={category} className="border-b border-gray-300 pb-2">
             <button
               onClick={() => handleCategoryClick(category)}
-              className="w-full text-left text-lg font-medium text-gray-900 hover:text-red-500 transition duration-200"
+              className="w-full text-left text-lg font-medium text-gray-900 hover:text-red-500 transition duration-200 flex"
             >
-              {category}
+              {category} <p>🔻</p>
             </button>
             {selectedCategory === category && (
               <ul className="pl-4 mt-2 space-y-2">

@@ -83,7 +83,10 @@ export default function PostProduto() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex items-center flex-col m-5">
+    <form
+      onSubmit={handleSubmit}
+      className="flex items-center flex-col m-5 bg-white py-4"
+    >
       <div className="flex flex-wrap gap-6 items-center p-6 justify-center">
         <input
           type="text"
@@ -357,9 +360,17 @@ export default function PostProduto() {
           className="border border-gray-300 w-full max-w-lg p-3 rounded-md bg-gray-100 transition duration-200 mb-4 focus:outline-none focus:border-red-500 focus:bg-white focus:shadow-outline"
         />
       </div>
-      <Button className="bg-red-700 text-white py-4 px-6 text-2xl rounded transition duration-100 hover:bg-red-600 focus:outline-none focus:shadow-outline">
-        Adicionar
-      </Button>
+      <div className="flex flex-wrap gap-2">
+        <button
+          type="reset"
+          className="bg-red-700 text-white py-4 px-6 text-2xl rounded transition duration-100 hover:bg-red-600 focus:outline-none focus:shadow-outline"
+        >
+          Resetar
+        </button>
+        <Button className="bg-green-700 text-white py-4 px-6 text-2xl rounded transition duration-100 hover:bg-green-600 focus:outline-none focus:shadow-outline">
+          Adicionar
+        </Button>
+      </div>
     </form>
   );
 }

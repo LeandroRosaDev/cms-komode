@@ -19,7 +19,7 @@ export default async function ClientePage({ params }: PageParams) {
   if (!response.ok) {
     console.log("Failed to fetch client data", response.status);
     return (
-      <section className="p-6 bg-gray-100 min-h-screen">
+      <section className="p-6">
         <div className="bg-white p-6 rounded-lg shadow-lg mb-6">
           <h1 className="text-2xl font-semibold text-center text-gray-700 mb-6">
             Erro ao buscar dados do cliente

@@ -12,7 +12,6 @@ export async function getClientesAction() {
     },
   });
   const data = await response.json();
-  console.log(data);
 
   return { data };
 }
