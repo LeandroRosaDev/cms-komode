@@ -3,6 +3,7 @@
 
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
+import Image from "next/image";
 
 export default function SaveClient({ cliente }) {
   async function handleSave() {
@@ -48,7 +49,7 @@ export default function SaveClient({ cliente }) {
       className="flex flex-col items-center justify-center bg-white  rounded-lg  mb-6"
       id="printable-area"
     >
-      <div class="element-visible text-start font-normal text-lg p-8 flex flex-col gap-6 bg-red-700 shadow-lg rounded-3xl mx-auto max-w-[1000px]">
+      <div class="element-visible text-start font-normal text-lg p-8 flex flex-col gap-6 bg-red-700 shadow-lg rounded-3xl my-2 mx-auto max-w-[1000px]">
         <h1 class="text-3xl font-medium text-white mb-6 text-center">
           {cliente.nome}
         </h1>
@@ -177,20 +178,22 @@ export default function SaveClient({ cliente }) {
         </button>
       </div>
 
-      <div class="element-hidden hidden p-14 flex flex-col justify-between w-[1400px] h-[1000px] mx-auto border rounded-lg mt-[200px]">
+      <div class="element-hidden  p-14 flex flex-col justify-between w-[1600px] h-[1000px] mx-auto border rounded-lg mt-[200px]">
         <div>
           <div class="flex flex-col mb-4">
-            <img
+            <Image
               src="/assets/logotipo.png"
               alt="Imagem do logotipo da nota"
               class="w-96 m-auto"
+              width={400}
+              height={40}
             />
           </div>
           <div class="grid grid-cols-2 gap-4 text-sm font-bold mb-6 mt-[100px]">
             <div>
-              <h1>Data: {cliente.data} 30/07/2024</h1>
+              <h1>Data: {cliente.data} 10/08/2024</h1>
               <h1>Nome: {cliente.nome}</h1>
-              <h1>Numero da nota: 394</h1>
+              <h1>Numero da nota: 398</h1>
               <h1>
                 Endereço: Rua {cliente.rua} nº{cliente.numero} -{" "}
                 {cliente.bairro} {cliente.cep} - {cliente.cidade} RJ
@@ -334,26 +337,32 @@ export default function SaveClient({ cliente }) {
               <p class="text-2xl text-red-700">AGRADECEMOS A PREFERÊNCIA!</p>
             </div>
             <div class="flex gap-1 items-center ">
-              <img
+              <Image
                 src="/assets/icones/1.svg"
                 alt="icone de um telefone"
-                class="h-6"
+                width={20}
+                height={6}
+                class="h-6 mt-2"
               />
               <p class="text-sm">+55 (21) 97899-1540</p>
             </div>
             <div class="flex gap-1 items-center ">
-              <img
+              <Image
                 src="/assets/icones/2.svg"
                 alt="icone de um telefone"
-                class="h-6"
+                width={20}
+                height={6}
+                class="h-6 mt-2"
               />
               <p class="text-sm">contato@komode.com</p>
             </div>
             <div class="flex gap-1 items-center ">
-              <img
+              <Image
                 src="/assets/icones/3.svg"
                 alt="icone de um telefone"
-                class="h-6"
+                width={20}
+                height={6}
+                class="h-6 mt-2"
               />
               <p class="text-sm">www.komodemoveis.com.br</p>
             </div>
