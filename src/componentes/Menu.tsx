@@ -179,11 +179,11 @@ export default function Menu() {
             </ul>
             {isAuthenticated && (
               <div className="hidden sm:flex gap-4 ml-auto">
-                <ButtonBack className="bg-red-500 text-white py-2 px-4 rounded transition duration-100 hover:bg-red-600 focus:outline-none focus:shadow-outline">
+                <ButtonBack className="bg-green-500 text-white py-2 px-4 rounded transition duration-100 hover:bg-green-600 focus:outline-none focus:shadow-outline">
                   Voltar
                 </ButtonBack>
                 <form onSubmit={handleLogout} className="ml-auto">
-                  <Button className="bg-red-500 text-white py-2 px-4 rounded transition duration-100 hover:bg-red-600 focus:outline-none focus:shadow-outline">
+                  <Button className="bg-green-500 text-white py-2 px-4 rounded transition duration-100 hover:bg-green-600 focus:outline-none focus:shadow-outline">
                     Sair
                   </Button>
                 </form>
