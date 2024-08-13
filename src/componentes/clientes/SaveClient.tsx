@@ -4,6 +4,7 @@
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import Image from "next/image";
+import { Button } from "../form-componentes/Button";
 
 export default function SaveClient({ cliente }) {
   async function handleSave() {
@@ -49,136 +50,155 @@ export default function SaveClient({ cliente }) {
       className="flex flex-col items-center justify-center bg-white  rounded-lg  mb-6"
       id="printable-area"
     >
-      <div class="element-visible text-start font-normal text-lg p-8 flex flex-col gap-6 bg-red-700 shadow-lg rounded-3xl my-2 mx-auto w-[1440px]">
-        <h1 class="text-3xl font-medium text-white mb-6 text-center uppercase">
-          {cliente.nome}
-        </h1>
-        <div class="grid grid-cols-2 gap-4">
-          {cliente.nome_receber && (
-            <p class="bg-gray-50 p-2 rounded-md shadow-inner">
-              <span class="font-semibold">Nome para receber: </span>
-              {cliente.nome_receber}
-            </p>
-          )}
-          {cliente.cidade && (
-            <p class="bg-gray-50 p-2 rounded-md shadow-inner">
-              <span class="font-semibold">Cidade: </span>
-              {cliente.cidade}
-            </p>
-          )}
-          {cliente.bairro && (
-            <p class="bg-gray-50 p-2 rounded-md shadow-inner">
-              <span class="font-semibold">Bairro: </span>
-              {cliente.bairro}
-            </p>
-          )}
-          {cliente.rua && (
-            <p class="bg-gray-50 p-2 rounded-md shadow-inner">
-              <span class="font-semibold">Rua: </span>
-              {cliente.rua}
-            </p>
-          )}
-          {cliente.numero && (
-            <p class="bg-gray-50 p-2 rounded-md shadow-inner">
-              <span class="font-semibold">Número: </span>
-              {cliente.numero}
-            </p>
-          )}
-          {cliente.cep && (
-            <p class="bg-gray-50 p-2 rounded-md shadow-inner">
-              <span class="font-semibold">CEP: </span>
-              {cliente.cep}
-            </p>
-          )}
-          {cliente.ponto_referencia && (
-            <p class="bg-gray-50 p-2 rounded-md shadow-inner">
-              <span class="font-semibold">Ponto de Referência: </span>
-              {cliente.ponto_referencia}
-            </p>
-          )}
-          {cliente.telefone_1 && (
-            <p class="bg-gray-50 p-2 rounded-md shadow-inner">
-              <span class="font-semibold">Telefone 1: </span>
-              {cliente.telefone_1}
-            </p>
-          )}
-          {cliente.telefone_2 && (
-            <p class="bg-gray-50 p-2 rounded-md shadow-inner">
-              <span class="font-semibold">Telefone 2: </span>
-              {cliente.telefone_2}
-            </p>
-          )}
-          {cliente.turno && (
-            <p class="bg-gray-50 p-2 rounded-md shadow-inner">
-              <span class="font-semibold">Turno: </span>
-              {cliente.turno}
-            </p>
-          )}
-          {cliente.produto_1 && (
-            <p class="bg-gray-50 p-2 rounded-md shadow-inner">
-              <span class="font-semibold">Produto 1: </span>
-              {cliente.produto_1} (Qtd: {cliente.qtd_1})
-            </p>
-          )}
-          {cliente.produto_2 && (
-            <p class="bg-gray-50 p-2 rounded-md shadow-inner">
-              <span class="font-semibold">Produto 2: </span>
-              {cliente.produto_2} (Qtd: {cliente.qtd_2})
-            </p>
-          )}
-          {cliente.produto_3 && (
-            <p class="bg-gray-50 p-2 rounded-md shadow-inner">
-              <span class="font-semibold">Produto 3: </span>
-              {cliente.produto_3} (Qtd: {cliente.qtd_3})
-            </p>
-          )}
-          {cliente.produto_4 && (
-            <p class="bg-gray-50 p-2 rounded-md shadow-inner">
-              <span class="font-semibold">Produto 4: </span>
-              {cliente.produto_4} (Qtd: {cliente.qtd_4})
-            </p>
-          )}
-          {cliente.produto_5 && (
-            <p class="bg-gray-50 p-2 rounded-md shadow-inner">
-              <span class="font-semibold">Produto 5: </span>
-              {cliente.produto_5} (Qtd: {cliente.qtd_5})
-            </p>
-          )}
-          {cliente.total && (
-            <p class="bg-gray-50 p-2 rounded-md shadow-inner col-span-2">
-              <span class="font-semibold">Total: </span>
-              R$
-              {(
-                (cliente.qtd_1 * cliente.subtotal_1 || 0) +
-                (cliente.qtd_2 * cliente.subtotal_2 || 0) +
-                (cliente.qtd_3 * cliente.subtotal_3 || 0) +
-                (cliente.qtd_4 * cliente.subtotal_4 || 0) +
-                (cliente.qtd_5 * cliente.subtotal_5 || 0)
-              ).toFixed(2)}
-            </p>
-          )}
-          {cliente.forma_pgto && (
-            <p class="bg-gray-50 p-2 rounded-md shadow-inner col-span-2">
-              <span class="font-semibold">Forma de pagamento: </span>
-              {cliente.forma_pgto}
-            </p>
-          )}
-          {cliente.numero_parcelas && (
-            <p class="bg-gray-50 p-2 rounded-md shadow-inner col-span-2">
-              <span class="font-semibold">Número de parcelas: </span>
-              {cliente.numero_parcelas}
-            </p>
-          )}
+      <div className="element-visible p-6  min-h-screen">
+        <div className="bg-white p-6 rounded-lg sm:shadow-lg max-w-4xl mx-auto">
+          <h1 className="text-3xl font-bold text-gray-800 text-center mb-8">
+            Detalhes do Cliente
+          </h1>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            {cliente.nome_receber && (
+              <div className="bg-gray-50 p-4 rounded-lg border border-gray-300 col-span-3 sm:col-span-1">
+                <h2 className="font-bold text-gray-700">Nome para receber:</h2>
+                <p>{cliente.nome_receber}</p>
+              </div>
+            )}
+            {cliente.cidade && (
+              <div className="bg-gray-50 p-4 rounded-lg border border-gray-300 col-span-3 sm:col-span-1">
+                <h2 className="font-bold text-gray-700">Cidade:</h2>
+                <p>{cliente.cidade}</p>
+              </div>
+            )}
+            {cliente.bairro && (
+              <div className="bg-gray-50 p-4 rounded-lg border border-gray-300 col-span-3 sm:col-span-1">
+                <h2 className="font-bold text-gray-700">Bairro:</h2>
+                <p>{cliente.bairro}</p>
+              </div>
+            )}
+            {cliente.rua && (
+              <div className="bg-gray-50 p-4 rounded-lg border border-gray-300 col-span-3 sm:col-span-1">
+                <h2 className="font-bold text-gray-700">Rua:</h2>
+                <p>{cliente.rua}</p>
+              </div>
+            )}
+            {cliente.numero && (
+              <div className="bg-gray-50 p-4 rounded-lg border border-gray-300 col-span-3 sm:col-span-1">
+                <h2 className="font-bold text-gray-700">Número:</h2>
+                <p>{cliente.numero}</p>
+              </div>
+            )}
+            {cliente.cep && (
+              <div className="bg-gray-50 p-4 rounded-lg border border-gray-300 col-span-3 sm:col-span-1">
+                <h2 className="font-bold text-gray-700">CEP:</h2>
+                <p>{cliente.cep}</p>
+              </div>
+            )}
+            {cliente.ponto_referencia && (
+              <div className="bg-gray-50 p-4 rounded-lg border border-gray-300 col-span-3">
+                <h2 className="font-bold text-gray-700">
+                  Ponto de Referência:
+                </h2>
+                <p>{cliente.ponto_referencia}</p>
+              </div>
+            )}
+            {cliente.telefone_1 && (
+              <div className="bg-gray-50 p-4 rounded-lg border border-gray-300 col-span-3 sm:col-span-1">
+                <h2 className="font-bold text-gray-700">Telefone 1:</h2>
+                <p>{cliente.telefone_1}</p>
+              </div>
+            )}
+            {cliente.telefone_2 && (
+              <div className="bg-gray-50 p-4 rounded-lg border border-gray-300 col-span-3 sm:col-span-1">
+                <h2 className="font-bold text-gray-700">Telefone 2:</h2>
+                <p>{cliente.telefone_2}</p>
+              </div>
+            )}
+            {cliente.turno && (
+              <div className="bg-gray-50 p-4 rounded-lg border border-gray-300 col-span-3 sm:col-span-1">
+                <h2 className="font-bold text-gray-700">Turno:</h2>
+                <p>{cliente.turno}</p>
+              </div>
+            )}
+            {cliente.produto_1 && (
+              <div className="bg-gray-50 p-4 rounded-lg border border-gray-300 col-span-3">
+                <h2 className="font-bold text-gray-700">Produto 1:</h2>
+                <p>
+                  {cliente.produto_1} (Qtd: {cliente.qtd_1})
+                </p>
+              </div>
+            )}
+            {cliente.produto_2 && (
+              <div className="bg-gray-50 p-4 rounded-lg border border-gray-300 col-span-3">
+                <h2 className="font-bold text-gray-700">Produto 2:</h2>
+                <p>
+                  {cliente.produto_2} (Qtd: {cliente.qtd_2})
+                </p>
+              </div>
+            )}
+            {cliente.produto_3 && (
+              <div className="bg-gray-50 p-4 rounded-lg border border-gray-300 col-span-3">
+                <h2 className="font-bold text-gray-700">Produto 3:</h2>
+                <p>
+                  {cliente.produto_3} (Qtd: {cliente.qtd_3})
+                </p>
+              </div>
+            )}
+            {cliente.produto_4 && (
+              <div className="bg-gray-50 p-4 rounded-lg border border-gray-300 col-span-3">
+                <h2 className="font-bold text-gray-700">Produto 4:</h2>
+                <p>
+                  {cliente.produto_4} (Qtd: {cliente.qtd_4})
+                </p>
+              </div>
+            )}
+            {cliente.produto_5 && (
+              <div className="bg-gray-50 p-4 rounded-lg border border-gray-300 col-span-3">
+                <h2 className="font-bold text-gray-700">Produto 5:</h2>
+                <p>
+                  {cliente.produto_5} (Qtd: {cliente.qtd_5})
+                </p>
+              </div>
+            )}
+
+            {cliente.forma_pgto && (
+              <div className="bg-gray-50 p-4 rounded-lg border border-gray-300 col-span-3 sm:col-span-1">
+                <h2 className="font-bold text-gray-700">Forma de pagamento:</h2>
+                <p>{cliente.forma_pgto}</p>
+              </div>
+            )}
+            {cliente.numero_parcelas && (
+              <div className="bg-gray-50 p-4 rounded-lg border border-gray-300 col-span-3 sm:col-span-1">
+                <h2 className="font-bold text-gray-700">Número de parcelas:</h2>
+                <p>{cliente.numero_parcelas}</p>
+              </div>
+            )}
+            {cliente.total && (
+              <div className="bg-gray-50 p-4 rounded-lg border border-gray-300 col-span-3 sm:col-span-1">
+                <h2 className="font-bold text-gray-700">Total:</h2>
+                <p>
+                  R$
+                  {(
+                    (cliente.qtd_1 * cliente.subtotal_1 || 0) +
+                    (cliente.qtd_2 * cliente.subtotal_2 || 0) +
+                    (cliente.qtd_3 * cliente.subtotal_3 || 0) +
+                    (cliente.qtd_4 * cliente.subtotal_4 || 0) +
+                    (cliente.qtd_5 * cliente.subtotal_5 || 0)
+                  ).toFixed(2)}
+                </p>
+              </div>
+            )}
+          </div>
+          <div className="flex justify-end mt-4">
+            <button
+              onClick={handleSave}
+              className="bg-green-600 text-white mx-auto px-4 py-2 rounded-lg shadow hover:bg-red-600 transition-colors duration-300 hidden sm:flex"
+            >
+              Emitir Nota
+            </button>
+          </div>
         </div>
-        <button
-          onClick={handleSave}
-          class="border-2 p-3 w-44 text-center mx-auto border-red-500 bg-red-500 text-white rounded-full shadow hover:bg-red-600 transition-colors duration-300"
-        >
-          Emitir Nota
-        </button>
       </div>
 
-      <div class="element-hidden  p-14 flex flex-col justify-between w-[1600px] h-[1000px] mx-auto border rounded-lg mt-[200px]">
+      <div class="element-hidden  p-14 sm:flex flex-col justify-between w-[1600px] h-[1000px] mx-auto border rounded-lg mt-[200px] hidden">
         <div>
           <div class="flex flex-col mb-4">
             <Image

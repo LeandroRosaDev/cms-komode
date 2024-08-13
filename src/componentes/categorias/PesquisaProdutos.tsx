@@ -22,7 +22,7 @@ const PesquisaProdutos = ({ onSearch }: SearchBarProps) => {
       />
       <button
         onClick={handleSearch}
-        className="bg-red-700 text-white py-2 px-4 rounded transition duration-100 hover:bg-red-600 focus:outline-none focus:shadow-outline"
+        className="bg-green-700 text-white py-2 px-4 rounded transition duration-100 hover:bg-green-600 focus:outline-none focus:shadow-outline"
       >
         Pesquisar
       </button>

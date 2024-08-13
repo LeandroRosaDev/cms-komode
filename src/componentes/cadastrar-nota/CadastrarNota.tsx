@@ -124,7 +124,7 @@ export default function CadastrarClientePage() {
   );
 
   return (
-    <section className="p-6 bg-red-100 min-h-screen">
+    <section className="p-6 bg-gray-100 min-h-screen">
       <div className="bg-white p-6 rounded-lg shadow-lg max-w-4xl mx-auto">
         <h1 className="text-2xl font-semibold text-center text-gray-700 mb-6">
           Cadastrar Cliente

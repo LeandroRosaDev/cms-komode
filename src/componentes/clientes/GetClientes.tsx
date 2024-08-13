@@ -1,60 +1,96 @@
-// @ts-nocheck
 "use client";
 
 import { getClientesAction } from "@/actions/cliente/get-clientes-action";
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { Button } from "../form-componentes/Button";
+
+interface Cliente {
+  id: string;
+  nome: string;
+  cidade: string;
+  bairro: string;
+}
 
 export default function GetClientes() {
-  const [clientes, setClientes] = useState([]);
+  const [clientes, setClientes] = useState<Cliente[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     async function fetchData() {
-      const { data } = await getClientesAction();
-      setClientes(data);
+      try {
+        const { data, error } = await getClientesAction();
+        if (error) {
+          setError(error);
+        } else {
+          setClientes(data);
+        }
+      } catch (err) {
+        setError("Erro ao buscar os clientes.");
+      } finally {
+        setLoading(false);
+      }
     }
 
     fetchData();
   }, []);
 
+  if (loading) {
+    return <div className="text-center p-4">Carregando...</div>;
+  }
+
+  if (error) {
+    return <div className="text-center p-4 text-red-500">Erro: {error}</div>;
+  }
+
   return (
-    <section className="p-4 sm:p-6 bg-red-100 min-h-screen">
-      <div className="bg-white p-4 sm:p-6 rounded-lg shadow-lg max-w-4xl mx-auto">
-        <h1 className="text-xl sm:text-2xl font-semibold text-center text-gray-700 mb-4 sm:mb-6">
-          Lista de Clientes
-        </h1>
-        <div className="flex flex-col gap-2">
+    <div className="min-h-screen bg-gray-100 p-4">
+      <div className="bg-white shadow-md rounded-lg p-4 sm:p-6">
+        <div className="flex flex-col sm:flex-row justify-between items-center mb-4 sm:mb-6">
+          <h1 className="text-lg sm:text-xl font-bold text-gray-700 text-center sm:text-left">
+            Lista de Clientes
+          </h1>
+          <div className="mt-2 sm:mt-0 flex space-x-2">
+            <Link
+              href="/cadastrar-nota"
+              className="bg-blue-500 text-white px-4 py-2 rounded"
+            >
+              Adicionar Cliente
+            </Link>
+          </div>
+        </div>
+        <div className="grid grid-cols-1 gap-2 sm:gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-4 gap-2 sm:gap-4 border-b py-2 font-semibold">
+            <span>Nome</span>
+            <span>Cidade</span>
+            <span>Bairro</span>
+            <span className="text-right">Ações</span>
+          </div>
           {clientes.map((cliente) => (
             <div
-              className="flex flex-col sm:flex-row justify-between border border-gray-300 p-3 sm:p-4 rounded-md bg-gray-100"
               key={cliente.id}
+              className="grid grid-cols-1 sm:grid-cols-4 gap-2 sm:gap-4 items-center border-b py-2"
             >
-              <div className="flex flex-col sm:flex-row items-start sm:items-center">
-                <div className="flex flex-wrap">
-                  <h2 className="font-semibold mr-1">Nome:</h2>
-                  <h2 className="text-lg font-semibold text-gray-800 mr-2">
-                    {cliente.nome}
-                  </h2>
-                </div>
-                <div className="flex flex-wrap">
-                  <h2 className="font-semibold mr-1">Cidade:</h2>
-                  <p className="text-gray-700 mr-2">{cliente.cidade}</p>
-                </div>
-                <div className="flex flex-wrap">
-                  <h2 className="font-semibold mr-1">Bairro:</h2>
-                  <p className="text-gray-700">{cliente.bairro}</p>
-                </div>
+              <span>{cliente.nome}</span>
+              <span>{cliente.cidade}</span>
+              <span>{cliente.bairro}</span>
+              <div className="flex flex-col sm:flex-row justify-end gap-2">
+                <Link href={`/clientes/${cliente.id}`}>
+                  <Button className="bg-green-500 text-white px-2 py-1 rounded w-full sm:w-auto">
+                    Ver Detalhes
+                  </Button>
+                </Link>
+                <Link href={`/clientes/${cliente.id}`}>
+                  <Button className="bg-red-500 text-white px-2 py-1 rounded w-full sm:w-auto">
+                    Excluir
+                  </Button>
+                </Link>
               </div>
-              <Link
-                className="mt-2 sm:mt-0 text-center bg-green-700 text-white px-4 py-2 rounded transition duration-100 hover:bg-green-600 focus:outline-none focus:shadow-outline"
-                href={`/clientes/${cliente.id}`}
-              >
-                Ver Detalhes
-              </Link>
             </div>
           ))}
         </div>
       </div>
-    </section>
+    </div>
   );
 }
