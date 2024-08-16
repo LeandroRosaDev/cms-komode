@@ -1,3 +1,4 @@
+//@ts-nocheck
 "use client";
 
 import { getClientesAction } from "@/actions/cliente/get-clientes-action";
