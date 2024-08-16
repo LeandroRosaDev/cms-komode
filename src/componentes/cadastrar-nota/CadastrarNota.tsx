@@ -2,6 +2,7 @@
 
 import { postClienteAction } from "@/actions/cliente/post-clientes-action";
 import { useState } from "react";
+import Image from "next/image";
 
 export default function CadastrarClientePage() {
   const [formData, setFormData] = useState({
@@ -371,15 +372,27 @@ export default function CadastrarClientePage() {
           <div className="col-span-6 sm:col-span-6 md:col-span-2 flex gap-1">
             <button
               type="reset"
-              className="bg-red-700 text-white py-2 px-3 text-xl rounded transition duration-100 hover:bg-red-600 focus:outline-none focus:shadow-outline"
+              className="bg-red-700 text-white py-2 px-4 text-xl rounded transition duration-100 hover:bg-red-600 focus:outline-none focus:shadow-outline flex items-center gap-1"
             >
-              Limpar Campos
+              <Image
+                src="/assets/icones/18.svg"
+                alt="logotipo"
+                width={20}
+                height={20}
+              />
+              Resetar
             </button>
             <button
               type="submit"
-              className="bg-green-700 text-white py-2 px-3 text-xl rounded transition duration-100 hover:bg-green-600 focus:outline-none focus:shadow-outline"
+              className="bg-green-700 text-white py-2 px-4 text-xl rounded transition duration-100 hover:bg-green-600 focus:outline-none focus:shadow-outline flex items-center gap-1"
             >
-              Cadastrar Cliente
+              <Image
+                src="/assets/icones/19.svg"
+                alt="logotipo"
+                width={20}
+                height={20}
+              />
+              Cadastrar
             </button>
           </div>
         </form>

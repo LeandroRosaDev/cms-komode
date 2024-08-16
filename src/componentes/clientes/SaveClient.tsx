@@ -190,8 +190,14 @@ export default function SaveClient({ cliente }) {
           <div className="flex justify-end mt-4">
             <button
               onClick={handleSave}
-              className="bg-green-600 text-white mx-auto px-4 py-2 rounded-lg shadow hover:bg-red-600 transition-colors duration-300 hidden sm:flex"
+              className="bg-green-700 text-white mx-auto px-4 py-4 rounded-lg shadow hover:bg-green-600 transition-colors duration-300 hidden sm:flex items-center justify-center gap-2"
             >
+              <Image
+                src="/assets/icones/27.svg"
+                alt="icone de um telefone"
+                width={30}
+                height={30}
+              />
               Emitir Nota
             </button>
           </div>
@@ -358,7 +364,7 @@ export default function SaveClient({ cliente }) {
             </div>
             <div class="flex gap-1 items-center ">
               <Image
-                src="/assets/icones/1.svg"
+                src="/assets/icones/5.svg"
                 alt="icone de um telefone"
                 width={20}
                 height={6}
@@ -368,7 +374,7 @@ export default function SaveClient({ cliente }) {
             </div>
             <div class="flex gap-1 items-center ">
               <Image
-                src="/assets/icones/2.svg"
+                src="/assets/icones/7.svg"
                 alt="icone de um telefone"
                 width={20}
                 height={6}
@@ -378,7 +384,7 @@ export default function SaveClient({ cliente }) {
             </div>
             <div class="flex gap-1 items-center ">
               <Image
-                src="/assets/icones/3.svg"
+                src="/assets/icones/6.svg"
                 alt="icone de um telefone"
                 width={20}
                 height={6}

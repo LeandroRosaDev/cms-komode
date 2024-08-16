@@ -176,15 +176,73 @@ export default function Menu() {
                   </li>
                 </ul>
               </li>
+              <li className="relative group">
+                <Link
+                  href="#"
+                  className="flex items-center gap-1 text-white hover:scale-105 duration-300 px-5 text-lg"
+                >
+                  <Image
+                    src="/assets/icones/28.svg"
+                    alt="logotipo"
+                    width={30}
+                    height={30}
+                  />
+                  Pedidos
+                </Link>
+                <ul className="absolute hidden group-hover:block bg-red-700 w-56 rounded shadow-lg p-4">
+                  <li>
+                    <Link
+                      href="/produto"
+                      className="flex items-center gap-2 w-full text-white p-2 hover:scale-105 duration-300"
+                      onClick={closeMenu}
+                    >
+                      <Image
+                        src="/assets/icones/29.svg"
+                        alt="pedidos"
+                        width={25}
+                        height={25}
+                      />
+                      Visualizar Pedidos
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      href="/adicionar-produtos"
+                      className="flex items-center gap-2 w-full text-white p-2 hover:scale-105 duration-300"
+                      onClick={closeMenu}
+                    >
+                      <Image
+                        src="/assets/icones/30.svg"
+                        alt="atualizar pedidos"
+                        width={25}
+                        height={25}
+                      />
+                      Atualizar Status
+                    </Link>
+                  </li>
+                </ul>
+              </li>
             </ul>
             {isAuthenticated && (
               <div className="hidden sm:flex gap-4 ml-auto">
-                <ButtonBack className="bg-green-700 text-white py-2 px-4 rounded transition duration-100 hover:bg-green-600 focus:outline-none focus:shadow-outline">
+                <ButtonBack className="bg-green-700 text-white py-2 px-4 rounded transition duration-100 hover:bg-green-600 focus:outline-none focus:shadow-outline flex items-center justify-center gap-1  ">
+                  <Image
+                    src="/assets/icones/23.svg"
+                    alt="logotipo"
+                    width={20}
+                    height={20}
+                  />
                   Voltar
                 </ButtonBack>
                 <form onSubmit={handleLogout} className="ml-auto">
-                  <Button className="bg-green-700 text-white py-2 px-4 rounded transition duration-100 hover:bg-green-600 focus:outline-none focus:shadow-outline">
+                  <Button className="bg-green-700 text-white py-2 px-4 rounded transition duration-100 hover:bg-green-600 focus:outline-none focus:shadow-outline flex items-center justify-center gap-2  ">
                     Sair
+                    <Image
+                      src="/assets/icones/22.svg"
+                      alt="logotipo"
+                      width={20}
+                      height={20}
+                    />
                   </Button>
                 </form>
               </div>

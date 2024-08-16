@@ -3,6 +3,7 @@
 import { postProdutosAction } from "@/actions/produtos/post-produtos-action";
 import { useState } from "react";
 import { Button } from "../form-componentes/Button";
+import Image from "next/image";
 
 export default function PostProduto() {
   const [situacao, setSituacao] = useState("");
@@ -87,6 +88,9 @@ export default function PostProduto() {
       onSubmit={handleSubmit}
       className="flex items-center flex-col m-5 bg-white py-4"
     >
+      <h1 className="text-3xl font-medium m-6 text-gray-700">
+        Adicionar Produtos
+      </h1>
       <div className="flex flex-wrap gap-6 items-center p-6 justify-center">
         <input
           type="text"
@@ -299,7 +303,7 @@ export default function PostProduto() {
         </select>
         <input type="hidden" id="link_1" name="link_1" value={link_1} />
         <input
-          type="hidden"
+          type="text"
           id="link_2"
           name="link_2"
           placeholder="Link Opcional"
@@ -363,11 +367,23 @@ export default function PostProduto() {
       <div className="flex flex-wrap gap-2">
         <button
           type="reset"
-          className="bg-red-700 text-white py-4 px-6 text-2xl rounded transition duration-100 hover:bg-red-600 focus:outline-none focus:shadow-outline"
+          className="bg-red-700 text-white py-4 px-6 text-xl rounded transition duration-100 hover:bg-red-600 focus:outline-none focus:shadow-outline flex items-center gap-1"
         >
+          <Image
+            src="/assets/icones/18.svg"
+            alt="logotipo"
+            width={30}
+            height={30}
+          />
           Resetar
         </button>
-        <Button className="bg-green-700 text-white py-4 px-6 text-2xl rounded transition duration-100 hover:bg-green-600 focus:outline-none focus:shadow-outline">
+        <Button className="bg-green-700 text-white py-4 px-6 text-xl rounded transition duration-100 hover:bg-green-600 focus:outline-none focus:shadow-outline flex items-center gap-1">
+          <Image
+            src="/assets/icones/19.svg"
+            alt="logotipo"
+            width={30}
+            height={30}
+          />
           Adicionar
         </Button>
       </div>

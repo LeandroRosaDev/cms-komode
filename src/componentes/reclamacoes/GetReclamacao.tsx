@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { getReclamacaoAction } from "@/actions/reclamacoes/get-reclamacao.action";
 import { Button } from "../form-componentes/Button";
+import Image from "next/image";
 
 interface Reclamacao {
   id: string;
@@ -71,12 +72,24 @@ export default function GetReclamacao() {
               </div>
               <div className="flex justify-end">
                 <Link
-                  className="text-center w-36 bg-green-700 text-white px-4 py-2 rounded transition duration-100 hover:bg-green-600 focus:outline-none focus:shadow-outline"
+                  className="text-center w-36 bg-green-700 text-white px-3 py-2 rounded transition duration-100 hover:bg-green-600 focus:outline-none focus:shadow-outline flex gap-1 items-center justify-center"
                   href={`/reclamacoes/${reclamacoes.id}`}
                 >
+                  <Image
+                    src="/assets/icones/20.svg"
+                    alt="icone de detalhes"
+                    width={20}
+                    height={20}
+                  />
                   Ver Detalhes
                 </Link>
-                <Button className="bg-red-600 text-white px-4 py-2 rounded w-36 ml-1 hover:bg-red-700 duration-200">
+                <Button className="bg-red-600 text-white px-3 py-2 rounded w-36 ml-1 hover:bg-red-700 duration-200 flex gap-1 items-center justify-center">
+                  <Image
+                    src="/assets/icones/21.svg"
+                    alt="icone de detalhes"
+                    width={20}
+                    height={20}
+                  />
                   Excluir
                 </Button>
               </div>

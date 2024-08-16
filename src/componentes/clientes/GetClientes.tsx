@@ -4,6 +4,7 @@ import { getClientesAction } from "@/actions/cliente/get-clientes-action";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Button } from "../form-componentes/Button";
+import Image from "next/image";
 
 interface Cliente {
   id: string;
@@ -77,12 +78,24 @@ export default function GetClientes() {
               <span>{cliente.bairro}</span>
               <div className="flex flex-col sm:flex-row justify-end gap-2">
                 <Link href={`/clientes/${cliente.id}`}>
-                  <Button className="bg-green-500 text-white px-2 py-1 rounded w-full sm:w-auto">
+                  <Button className="bg-green-700 text-white px-3 py-2 rounded w-full sm:w-auto flex gap-1 items-center justify-center hover:bg-green-600 duration-200">
+                    <Image
+                      src="/assets/icones/20.svg"
+                      alt="icone de detalhes"
+                      width={20}
+                      height={20}
+                    />
                     Ver Detalhes
                   </Button>
                 </Link>
                 <Link href={`/clientes/${cliente.id}`}>
-                  <Button className="bg-red-500 text-white px-2 py-1 rounded w-full sm:w-auto">
+                  <Button className="bg-red-600 text-white px-3 py-2 rounded w-full sm:w-auto flex gap-1 items-center justify-center hover:bg-red-700">
+                    <Image
+                      src="/assets/icones/21.svg"
+                      alt="logotipo"
+                      width={20}
+                      height={20}
+                    />
                     Excluir
                   </Button>
                 </Link>

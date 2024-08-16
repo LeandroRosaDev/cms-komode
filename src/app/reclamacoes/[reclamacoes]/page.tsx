@@ -1,5 +1,7 @@
 import { PageParams } from "@/Types";
 import tokenAction from "@/actions/login/get-token";
+import Link from "next/link";
+import Image from "next/image";
 
 interface ReclamacaoData {
   nome: string;
@@ -65,6 +67,39 @@ export default async function ReclamacaoPage({ params }: PageParams) {
               Descrição da Reclamação:
             </h2>
             <p>{data.reclamacao}</p>
+          </div>
+          <div className="border col-span-2 border-red-400 my-6"></div>
+          <textarea
+            placeholder="Responda a essa reclamação"
+            name="reclamacao"
+            id="reclamacao"
+            className=" p-2 border border-gray-300 rounded focus:border-red-600 focus:outline-none  h-32 resize-vertical col-span-2"
+          />
+          <div className="flex items-center justify-center gap-3 col-span-2">
+            <Link
+              href="/"
+              className="bg-green-600 text-white px-3 py-3 rounded w-full sm:w-auto flex gap-1 items-center justify-center duration-200 hover:bg-green-700"
+            >
+              <Image
+                src="/assets/wpp icon.png"
+                alt="logotipo"
+                width={30}
+                height={30}
+              />
+              Responder Via Whatsapp
+            </Link>
+            <Link
+              href="/"
+              className="bg-red-700 text-white px-3 py-3 rounded w-full sm:w-auto flex gap-2 items-center justify-center duration-200 hover:bg-red-600"
+            >
+              <Image
+                src="/assets/icones/26.svg"
+                alt="logotipo"
+                width={30}
+                height={30}
+              />
+              Responder Via E-mail
+            </Link>
           </div>
         </div>
       </div>

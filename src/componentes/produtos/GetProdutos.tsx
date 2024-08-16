@@ -100,8 +100,8 @@ const GetProdutoPromocao = () => {
   };
 
   return (
-    <section className="p-1">
-      <div className="flex flex-col justify-start items-center gap-2 bg-slate-100 shadow-sm p-2 max-w-screen-lg text-center px-4 mx-auto my-8">
+    <section className="p-1 border ">
+      <div className="flex flex-col justify-start items-center gap-2 bg-white shadow rounded-xl p-2 max-w-screen-md text-center px-4 mx-4 sm:mx-auto my-8">
         <h1 className="text-2xl">
           Selecione Abaixo a situação e disponibilidade do produto
         </h1>
@@ -125,13 +125,13 @@ const GetProdutoPromocao = () => {
         <PesquisaProdutos onSearch={(term) => setSearchTerm(term)} />
       </div>
 
-      <div className="flex flex-wrap justify-center items-center gap-4 mx-auto my-8 max-w-screen-xl px-4">
+      <div className="flex flex-wrap  justify-center items-center gap-4 mx-auto my-8 max-w-screen-2xl px-4">
         {produtos.length === 0 ? (
           <p>Nenhum produto encontrado em estoque.</p>
         ) : (
           produtos.map((produto) => (
             <div
-              className="flex flex-col items-center justify-center relative transform transition duration-400 hover:scale-105 max-w-xs bg-slate-100 p-4 rounded-2xl shadow-sm"
+              className="flex flex-col items-center justify-center relative transform transition duration-400 hover:scale-105 max-w-xs bg-white p-4 rounded-2xl shadow"
               key={produto.id}
             >
               {produto.fotos && produto.fotos.length > 0 && (
@@ -150,8 +150,8 @@ const GetProdutoPromocao = () => {
                 </Link>
               )}
 
-              <div className="p-2 w-full flex flex-col items-start">
-                <h1 className="text-center text-base m-0">
+              <div className="p-2 w-full flex flex-col items-start overflow-hidden">
+                <h1 className="text-center text-base m-0 truncate">
                   {produto?.nome} {produto?.cor}
                 </h1>
                 <h1 className="text-center text-base m-0">
@@ -186,7 +186,7 @@ const GetProdutoPromocao = () => {
                   <option value="promocao">Produto em Promoção</option>
                   <option value="queima">Produto em Queima de estoque</option>
                 </select>
-                <div className="flex items-center space-x-2">
+                <div className="flex items-center space-x-2 mb-2">
                   <label>
                     <input
                       type="radio"
@@ -223,9 +223,15 @@ const GetProdutoPromocao = () => {
                   </label>
                 </div>
                 <button
-                  className="bg-red-700 text-white py-2 px-4 mt-2 rounded"
+                  className="bg-red-700 text-white py-2 px-4 mx-auto rounded flex items-center justify-center gap-1"
                   onClick={() => handleDelete(produto.id)}
                 >
+                  <Image
+                    src="/assets/icones/21.svg"
+                    alt="logotipo"
+                    width={20}
+                    height={20}
+                  />
                   Deletar
                 </button>
               </div>

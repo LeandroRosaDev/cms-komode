@@ -121,7 +121,7 @@ const CategoriasPage = ({ params }: PageParams) => {
                 </Link>
               )}
 
-              <div className="p-2 w-full flex flex-col items-start">
+              <div className=" w-full flex flex-col items-start">
                 <h1 className="text-center text-base m-0">
                   {produto?.nome} {produto?.cor}
                 </h1>
@@ -154,6 +154,15 @@ const CategoriasPage = ({ params }: PageParams) => {
                   <option value="promocao">Produto em Promoção</option>
                   <option value="queima">Produto em Queima de estoque</option>
                 </select>
+                <input
+                  type="text"
+                  defaultValue={produto.link_2}
+                  onBlur={(e) =>
+                    handleBlur(produto.id, "link_2", e.target.value)
+                  }
+                  className="border mb-1 border-gray-300 w-full p-1 rounded-md bg-gray-100 transition duration-200 focus:outline-none focus:border-red-500 focus:bg-white focus:shadow-outline"
+                />
+
                 <a
                   target="blank"
                   href={produto?.link_1}
@@ -161,7 +170,7 @@ const CategoriasPage = ({ params }: PageParams) => {
                 >
                   Conferir Link
                 </a>
-                <div className="flex items-center space-x-2">
+                <div className="flex items-center space-x-2 mb-2">
                   <label>
                     <input
                       type="radio"
@@ -198,9 +207,15 @@ const CategoriasPage = ({ params }: PageParams) => {
                   </label>
                 </div>
                 <button
-                  className="bg-red-700 text-white py-2 px-4 mt-2 rounded"
+                  className="bg-red-700 text-white py-2 px-4 mx-auto rounded flex items-center justify-center gap-1"
                   onClick={() => handleDelete(produto.id)}
                 >
+                  <Image
+                    src="/assets/icones/21.svg"
+                    alt="logotipo"
+                    width={20}
+                    height={20}
+                  />
                   Deletar
                 </button>
               </div>
