@@ -106,7 +106,7 @@ const CategoriasPage = ({ params }: PageParams) => {
         ) : (
           produtos.map((produto) => (
             <div
-              className="flex flex-col items-center justify-center relative transform transition duration-400 hover:scale-105 max-w-[300px] max-h-[500px] bg-slate-100 p-4 rounded-2xl shadow-sm"
+              className="flex flex-col items-center justify-center relative transform transition duration-400 hover:scale-105 max-w-[300px] max-h-[600px] bg-slate-100 p-4 rounded-2xl shadow-sm"
               key={produto.id}
             >
               {produto.fotos && produto.fotos.length > 0 && (
