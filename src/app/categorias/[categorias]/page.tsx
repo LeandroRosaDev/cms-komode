@@ -82,7 +82,9 @@ const CategoriasPage = ({ params }: PageParams) => {
         } else {
           updatedProduct.preco = formatPrice(preco);
           updatedProduct.preco_original = formatPrice(preco * 1.1);
-          updatedProduct.preco_parcelado = formatPrice(preco / 10);
+          updatedProduct.preco_parcelado = formatPrice(
+            (preco * 1.0269 * 1.05) / 12
+          );
         }
       } else {
         (updatedProduct as any)[field] = value;

@@ -20,7 +20,7 @@ export default function PostProduto() {
     return `R$ ${formattedValue}`;
   };
 
-  const precoParcelado = formatPrice(preco / 10);
+  const precoParcelado = formatPrice(preco * 1.0269 * 1.05) / 12;
   const precoOriginal = formatPrice(preco * 1.1);
   const precoFormatted = formatPrice(preco);
 

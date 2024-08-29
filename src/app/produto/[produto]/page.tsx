@@ -1,8 +1,8 @@
 import { PageParams } from "@/Types";
-import Image from "next/image";
 import { ButtonBack } from "@/componentes/helpers/ButtonBack";
 import ClientProdutoPage from "@/componentes/produtos/Put-produto";
 import tokenAction from "@/actions/login/get-token";
+import ClientProdutoImages from "@/componentes/produtos/ClientProdutoImages";
 
 export default async function ServerProdutoPage({ params }: PageParams) {
   const token = await tokenAction();
@@ -34,37 +34,13 @@ export default async function ServerProdutoPage({ params }: PageParams) {
         </a>
         <ClientProdutoPage data={data} />
       </div>
-      <div className="bg-white p-6 rounded-lg shadow-lg mb-6">
-        <h2 className="text-xl font-semibold text-gray-700 mb-4">Imagens</h2>
-        {data.fotos.length > 0 && (
-          <div className="mb-6">
-            <Image
-              src={data.fotos[0].src}
-              alt={data.fotos[0].titulo}
-              width={500}
-              height={400}
-              className="rounded-lg shadow-md"
-            />
-          </div>
-        )}
-        <div>
-          <h3 className="text-lg font-semibold text-gray-700 mb-4">
-            Todas as Imagens:
-          </h3>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {data.fotos.map((foto: any, index: any) => (
-              <Image
-                key={index}
-                src={foto.src}
-                alt={foto.titulo}
-                width={200}
-                height={100}
-                className="rounded-lg shadow-md"
-              />
-            ))}
-          </div>
-        </div>
-      </div>
+
+      {/* Passar as informações de imagens para o componente do cliente */}
+      <ClientProdutoImages
+        fotos={data.fotos}
+        produtoId={params.produto}
+        token={token}
+      />
     </section>
   );
 }
