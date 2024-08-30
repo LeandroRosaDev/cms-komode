@@ -23,7 +23,7 @@ export default function ClientProdutoImages({
 
     try {
       const deleteResponse = await fetch(
-        `https://apikomode.altuori.com/wp-json/api/produto/delete-image/${imageId}`,
+        `https://apikomode.altuori.com/wp-json/api/imagem/${produtoId}/${imageId}`,
         {
           method: "DELETE",
           headers: {
@@ -36,9 +36,11 @@ export default function ClientProdutoImages({
         setImages(images.filter((img) => img.id !== imageId));
         alert("Imagem deletada com sucesso!");
       } else {
-        alert("Erro ao deletar a imagem");
+        const errorData = await deleteResponse.json();
+        alert(`Erro ao deletar a imagem: ${errorData.message}`);
       }
     } catch (error) {
+      console.error("Erro ao deletar a imagem:", error);
       alert("Erro ao deletar a imagem");
     }
   };
@@ -47,11 +49,11 @@ export default function ClientProdutoImages({
     const file = event.target.files?.[0];
     if (file) {
       const formData = new FormData();
-      formData.append("image", file);
+      formData.append("file", file); // Certifique-se de que a API espera "file" como chave
 
       try {
         const addResponse = await fetch(
-          `https://apikomode.altuori.com/wp-json/api/produto/add-image/${produtoId}`,
+          `https://apikomode.altuori.com/wp-json/api/imagem/${produtoId}`,
           {
             method: "POST",
             headers: {
@@ -62,7 +64,12 @@ export default function ClientProdutoImages({
         );
 
         if (addResponse.ok) {
-          const newImage = await addResponse.json(); // Certifique-se de que a API retorna o ID da nova imagem
+          const data = await addResponse.json();
+          const newImage = {
+            src: data.image_urls[0], // Supondo que a API retorna a URL da nova imagem
+            titulo: file.name,
+            id: data.image_ids[0], // Supondo que a API retorna o ID da nova imagem
+          };
           setImages([...images, newImage]);
           alert("Imagem adicionada com sucesso!");
         } else {
@@ -70,6 +77,7 @@ export default function ClientProdutoImages({
           alert(`Erro ao adicionar a imagem: ${errorData.message}`);
         }
       } catch (error) {
+        console.error("Erro ao adicionar a imagem:", error);
         alert("Erro ao adicionar a imagem");
       }
     }

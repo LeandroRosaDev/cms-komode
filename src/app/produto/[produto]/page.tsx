@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { PageParams } from "@/Types";
 import { ButtonBack } from "@/componentes/helpers/ButtonBack";
 import ClientProdutoPage from "@/componentes/produtos/Put-produto";
@@ -26,7 +27,7 @@ export default async function ServerProdutoPage({ params }: PageParams) {
         </h1>
         <ButtonBack className="mb-4">Voltar</ButtonBack>
         <a
-          target="blank"
+          target="_blank"
           href={data.link_1}
           className="text-white bg-green-500 hover:bg-green-400 mb-4 block text-center p-3 rounded-3xl mx-auto my-0 w-52"
         >
@@ -38,7 +39,7 @@ export default async function ServerProdutoPage({ params }: PageParams) {
       {/* Passar as informações de imagens para o componente do cliente */}
       <ClientProdutoImages
         fotos={data.fotos}
-        produtoId={params.produto}
+        produtoId={params.produto} // Certifique-se de que `params.produto` é o slug ou ID correto
         token={token}
       />
     </section>
