@@ -16,42 +16,123 @@ export default function CadastrarClientePage() {
     cep: "",
     cidade: "",
     ponto_referencia: "",
-    turno: "",
+    data_emissao: "",
     produto_1: "",
     desc_1: "",
-    qtd_1: "",
+    qtd_1: "1",
     subtotal_1: "",
     produto_2: "",
     desc_2: "",
-    qtd_2: "",
+    qtd_2: "1",
     subtotal_2: "",
     produto_3: "",
     desc_3: "",
-    qtd_3: "",
+    qtd_3: "1",
     subtotal_3: "",
     produto_4: "",
     desc_4: "",
-    qtd_4: "",
+    qtd_4: "1",
     subtotal_4: "",
     produto_5: "",
     desc_5: "",
-    qtd_5: "",
+    qtd_5: "1",
     subtotal_5: "",
-    total: "",
+    cpf: "",
     forma_pgto: "",
     numero_parcelas: "",
+    obs: "",
+    numero_nota: "",
   });
 
   const [numProdutos, setNumProdutos] = useState(1);
 
+  const formatCPF = (cpf: string) => {
+    const cleanCPF = cpf.replace(/\D/g, ""); // Remove todos os caracteres que não são números
+    return cleanCPF.replace(/(\d{3})(\d{3})(\d{3})(\d{2})$/, "$1.$2.$3-$4");
+  };
+
+  const formatPhoneNumber = (phone: string) => {
+    const cleanPhone = phone.replace(/\D/g, ""); // Remove todos os caracteres que não são números
+    return cleanPhone.replace(/^(\d{2})(\d{5})(\d{4})$/, "($1) $2-$3");
+  };
+  const formatCEP = (cep: string) => {
+    const cleanCEP = cep.replace(/\D/g, ""); // Remove todos os caracteres que não são números
+    return cleanCEP.replace(/^(\d{5})(\d{3})$/, "$1-$2");
+  };
+
   const handleChange = (e: any) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+
+    if (
+      name === "forma_pgto" &&
+      ["Dinheiro", "Pix", "Pix | Dinheiro"].includes(value)
+    ) {
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        [name]: value,
+        numero_parcelas: "", // Reseta o campo número de parcelas
+      }));
+    } else {
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        [name]: value,
+      }));
+    }
   };
 
   const handleSubmit = async (event: any) => {
     event.preventDefault();
-    await postClienteAction(formData);
+
+    // Formata a data para "data_emissao" como "dd/mm/yyyy"
+    const currentDate = new Date();
+    const formattedEmissaoDate = `${currentDate
+      .getDate()
+      .toString()
+      .padStart(2, "0")}/${(currentDate.getMonth() + 1)
+      .toString()
+      .padStart(2, "0")}/${currentDate.getFullYear().toString()}`;
+
+    // Formata a data para "numero_nota" como "yyyy/mm/dd"
+    const formattedNotaDate = `${currentDate.getFullYear()}${(
+      currentDate.getMonth() + 1
+    )
+      .toString()
+      .padStart(2, "0")}${currentDate.getDate().toString().padStart(2, "0")}`;
+
+    // Formatação do CPF
+    const formattedCPF = formatCPF(formData.cpf);
+
+    // Formata os campos de telefone
+    const formattedPhone1 = formatPhoneNumber(formData.telefone_1);
+    const formattedPhone2 = formatPhoneNumber(formData.telefone_2);
+
+    // Formata o CEP
+    const formattedCEP = formatCEP(formData.cep);
+
+    // Extrai os 3 últimos dígitos do CPF
+    const cpfLastThree = formData.cpf.slice(-3);
+
+    // Gera dois números aleatórios entre 1 e 9
+    const randomNumbers =
+      Math.floor(Math.random() * 9 + 1).toString() +
+      Math.floor(Math.random() * 9 + 1).toString();
+
+    // Gera o número de nota único
+    const numeroNota = `${formattedNotaDate}${cpfLastThree}${randomNumbers}`;
+
+    // Atualiza o formData com a data de emissão, o CPF formatado, os telefones formatados e o número de nota
+    const updatedFormData = {
+      ...formData,
+      data_emissao: formattedEmissaoDate,
+      cpf: formattedCPF,
+      telefone_1: formattedPhone1,
+      telefone_2: formattedPhone2,
+      numero_nota: numeroNota,
+      cep: formattedCEP,
+    };
+
+    // Envia os dados
+    await postClienteAction(updatedFormData);
   };
 
   const handleNumProdutosChange = (e: any) => {
@@ -161,7 +242,7 @@ export default function CadastrarClientePage() {
           </div>
           <div className="col-span-6 sm:col-span-6 md:col-span-3">
             <label htmlFor="rua" className="block text-gray-700">
-              Rua
+              Logradouro
             </label>
             <input
               type="text"
@@ -242,6 +323,19 @@ export default function CadastrarClientePage() {
               className="border border-gray-300 w-full p-3 rounded-md bg-gray-100 transition duration-200 focus:outline-none focus:border-red-500 focus:bg-white focus:shadow-outline"
             />
           </div>
+          <div className="col-span-6 sm:col-span-6 md:col-span-1">
+            <label htmlFor="obs" className="block text-gray-700">
+              Observação
+            </label>
+            <input
+              type="text"
+              id="obs"
+              name="obs"
+              value={formData.obs}
+              onChange={handleChange}
+              className="border border-gray-300 w-full p-3 rounded-md bg-gray-100 transition duration-200 focus:outline-none focus:border-red-500 focus:bg-white focus:shadow-outline"
+            />
+          </div>
           <div className="col-span-6 sm:col-span-6 md:col-span-2">
             <label htmlFor="telefone_1" className="block text-gray-700">
               Telefone 1
@@ -270,21 +364,6 @@ export default function CadastrarClientePage() {
             />
           </div>
 
-          <div className="col-span-3 sm:col-span-3 md:col-span-1">
-            <label htmlFor="turno" className="block text-gray-700">
-              Turno
-            </label>
-            <select
-              id="turno"
-              name="turno"
-              value={formData.turno}
-              onChange={handleChange}
-              className="border border-gray-300 w-full p-3 rounded-md bg-gray-100 transition duration-200 focus:outline-none focus:border-red-500 focus:bg-white focus:shadow-outline"
-            >
-              <option value="Manha">Manhã</option>
-              <option value="Tarde">Tarde</option>
-            </select>
-          </div>
           <div className="col-span-3 sm:col-span-3 md:col-span-1">
             <label htmlFor="num_produtos" className="block text-gray-700">
               Qtd de Produtos
@@ -357,14 +436,14 @@ export default function CadastrarClientePage() {
             </select>
           </div>
           <div className="col-span-3 sm:col-span-3 md:col-span-1">
-            <label htmlFor="total" className="block text-gray-700">
-              Total
+            <label htmlFor="cpf" className="block text-gray-700">
+              CPF
             </label>
             <input
-              type="number"
-              id="total"
-              name="total"
-              value={formData.total}
+              type="text"
+              id="cpf"
+              name="cpf"
+              value={formData.cpf}
               onChange={handleChange}
               className="border border-gray-300 w-full p-3 rounded-md bg-gray-100 transition duration-200 focus:outline-none focus:border-red-500 focus:bg-white focus:shadow-outline"
             />

@@ -18,7 +18,7 @@ export default async function RootLayout({
 
   return (
     <html lang="pt-br">
-      <body className="bg-gray-200">
+      <body className="bg-gray-200 print:bg-white">
         <UserContextProvider user={user}>
           <Menu />
           {children}

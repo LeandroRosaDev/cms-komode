@@ -18,5 +18,7 @@ export async function postClienteAction(formData: any) {
     throw new Error("Failed to create client");
   }
 
+  console.log(formData);
+
   const data = await response.json();
 }

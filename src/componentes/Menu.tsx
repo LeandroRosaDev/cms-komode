@@ -27,7 +27,7 @@ export default function Menu() {
   const toggleHome = () => setIsHomeOpen(!isHomeOpen);
 
   return (
-    <header className="bg-red-700">
+    <header className="bg-red-700 print:hidden">
       {isAuthenticated && (
         <nav className="p-4">
           <div className="container mx-auto flex items-center justify-between">

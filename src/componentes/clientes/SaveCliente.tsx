@@ -2,13 +2,13 @@
 "use client";
 
 import html2canvas from "html2canvas";
-import jsPDF from "jspdf";
 import Image from "next/image";
 import { useState, useEffect } from "react";
 
-export default function SaveClient({ cliente }) {
+export default function SaveCliente({ cliente }) {
   const [saidaData, setSaidaData] = useState("");
   const [saidaHora, setSaidaHora] = useState("");
+  const [originalTitle, setOriginalTitle] = useState("");
 
   useEffect(() => {
     // Ao carregar a página, atualiza a "Data Saída" e "Hora Saída"
@@ -29,53 +29,24 @@ export default function SaveClient({ cliente }) {
 
     setSaidaData(formattedDate);
     setSaidaHora(formattedTime);
+    setOriginalTitle(document.title);
   }, []); // Executa apenas uma vez, quando o componente é montado
 
-  async function handleSave() {
-    // Continuação do processo de salvar o PDF
-    const hiddenElements = document.querySelectorAll(".element-hidden");
-    const visibleElements = document.querySelectorAll(".element-visible");
+  function handleSave() {
+    document.title = `Nota fiscal de ${cliente.nome}`;
 
-    visibleElements.forEach((el) => {
-      el.classList.add("hidden");
-    });
-    hiddenElements.forEach((el) => {
-      el.classList.remove("hidden");
-    });
-
-    const content = document.querySelector("#printable-area");
-
-    const canvas = await html2canvas(content, {
-      scale: 2,
-    });
-
-    visibleElements.forEach((el) => {
-      el.classList.remove("hidden");
-    });
-    hiddenElements.forEach((el) => {
-      el.classList.add("hidden");
-    });
-
-    const imgData = canvas.toDataURL("image/png");
-
-    const pdf = new jsPDF("p", "mm", "a4");
-
-    const pageWidth = 210;
-    const pageHeight = 297;
-    const imgWidth = pageWidth;
-    const imgHeight = (canvas.height * imgWidth) / canvas.width;
-
-    pdf.addImage(imgData, "PNG", 0, 0, imgWidth, imgHeight);
-
-    pdf.save(`nota_de_${cliente.nome.replace(/\s+/g, "_").toLowerCase()}.pdf`);
+    setTimeout(() => {
+      window.print();
+      document.title = originalTitle;
+    }, 200);
   }
 
   return (
     <section
-      className="flex flex-col items-center justify-center bg-white  rounded-lg  mb-6"
+      className="flex flex-col items-center justify-center bg-white rounded-lg mb-6 avoid-break-inside"
       id="printable-area"
     >
-      <div className="element-visible p-6  min-h-screen">
+      <div className="element-visible p-6  min-h-screen print:hidden">
         <div className="bg-white p-6 rounded-lg sm:shadow-lg max-w-4xl mx-auto">
           <h1 className="text-3xl font-bold text-gray-800 text-center mb-8">
             Detalhes do Cliente
@@ -223,8 +194,8 @@ export default function SaveClient({ cliente }) {
         </div>
       </div>
 
-      <div className="element-hidden p-6 w-[1600px] mx-auto border border-black mt-36">
-        <div className="mb-20 border-b border-dashed border-black pb-10 grid grid-cols-7 gap-3">
+      <div className="element-hidden p-6 w-[1200px]  mx-auto my-auto border border-black print:block ">
+        <div className="mb-20 border-b border-dashed border-black pb-10 grid grid-cols-7 gap-3 ">
           <div className="col-span-6">
             <div className="grid ">
               <div className="text-left border border-black">
@@ -249,11 +220,12 @@ export default function SaveClient({ cliente }) {
           </div>
           <div className="text-center border flex flex-col justify-center border-black p-2 col-span-1">
             <span className="block font-bold">CF-e</span>
-            <span className="block font-bold">Nº {cliente.numero_nota}</span>
+            <span className="block font-bold text-sm">
+              Nº {cliente.numero_nota}
+            </span>
             <span className="block font-bold">Série 1</span>
           </div>
         </div>
-
         <div className="flex justify-between items-center  mb-4">
           <div className="flex flex-col items-center justify-center gap-2 border border-black p-2 h-[250px] w-[500px]">
             <Image
@@ -291,7 +263,6 @@ export default function SaveClient({ cliente }) {
             />
           </div>
         </div>
-
         <div className="text-left border border-black p-2 grid grid-cols-2">
           <div>
             <span className="block text-sm">Natureza da operação</span>
@@ -299,7 +270,6 @@ export default function SaveClient({ cliente }) {
           </div>
         </div>
         <span className="block font-bold mt-2 pb-2">Dados da empresa</span>
-
         <div className="mb-10 border border-black">
           <div className="grid grid-cols-2">
             <div>
@@ -334,11 +304,9 @@ export default function SaveClient({ cliente }) {
             </div>
           </div>
         </div>
-
         <span className="block font-bold mt-2 pb-2">
           Destinatário/Remetente
         </span>
-
         <div className="mb-10 border border-black">
           <div className="grid grid-cols-2">
             <div>
@@ -408,7 +376,6 @@ export default function SaveClient({ cliente }) {
           </div>
         </div>
         <span className="block font-bold mt-2 pb-2">Itens do cupom fiscal</span>
-
         <div className="mb-10 border border-black">
           <div className="grid grid-cols-6 text-center bg-gray-200 font-bold">
             <div className="p-1 border-r border-black">Nome</div>
@@ -502,7 +469,6 @@ export default function SaveClient({ cliente }) {
         <span className="block font-bold mt-2 pb-2">
           Total dos itens/serviços
         </span>
-
         <div className="mb-10 border border-black">
           <div className="grid grid-cols-4">
             <div>
@@ -543,9 +509,7 @@ export default function SaveClient({ cliente }) {
             </div>
           </div>
         </div>
-
         <span className="block font-bold pb-2">Dados adicionais</span>
-
         <div className="border border-black h-36 p-2">
           <span className="block ">Observações:</span>
           {cliente.numero_parcelas && (

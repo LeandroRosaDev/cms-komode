@@ -1,7 +1,7 @@
 import { PageParams } from "@/Types";
 import tokenAction from "@/actions/login/get-token";
-import SaveClient from "@/componentes/clientes/SaveClient";
 import { ButtonBack } from "@/componentes/helpers/ButtonBack";
+import SaveCliente from "@/componentes/clientes/SaveCliente";
 
 export default async function ClientePage({ params }: PageParams) {
   const token = await tokenAction();
@@ -33,10 +33,11 @@ export default async function ClientePage({ params }: PageParams) {
   const data = await response.json();
 
   return (
-    <section className="p-6  min-h-screen">
-      <div className="p-6 mb-6">
-        <SaveClient cliente={data} />
-        <ButtonBack className="mb-4">Voltar</ButtonBack>
+    <section className="p-6  min-h-screen mx-auto">
+      <div className="p-6 mb-6 mx-auto">
+        {/* <SaveClient cliente={data} /> */}
+        <SaveCliente cliente={data} />
+        <ButtonBack className="mb-4 print:hidden">Voltar</ButtonBack>
       </div>
     </section>
   );

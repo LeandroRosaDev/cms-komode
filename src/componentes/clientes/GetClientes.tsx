@@ -63,20 +63,30 @@ export default function GetClientes() {
           </div>
         </div>
         <div className="grid grid-cols-1 gap-2 sm:gap-4">
-          <div className="grid grid-cols-1 sm:grid-cols-4 gap-2 sm:gap-4 border-b py-2 font-semibold">
+          <div className="grid grid-cols-1 sm:grid-cols-5 gap-2 sm:gap-4 border-b py-2 font-semibold">
             <span>Nome</span>
             <span>Cidade</span>
             <span>Bairro</span>
+            <span>Valor Nota</span>
             <span className="text-right">Ações</span>
           </div>
           {clientes.map((cliente) => (
             <div
               key={cliente.id}
-              className="grid grid-cols-1 sm:grid-cols-4 gap-2 sm:gap-4 items-center border-b py-2"
+              className="grid grid-cols-1 sm:grid-cols-5 gap-2 sm:gap-4 items-center border-b py-2"
             >
               <span>{cliente.nome}</span>
               <span>{cliente.cidade}</span>
               <span>{cliente.bairro}</span>
+              <span>
+                R$
+                {(cliente.qtd_1 * cliente.subtotal_1 || 0) +
+                  (cliente.qtd_2 * cliente.subtotal_2 || 0) +
+                  (cliente.qtd_3 * cliente.subtotal_3 || 0) +
+                  (cliente.qtd_4 * cliente.subtotal_4 || 0) +
+                  (cliente.qtd_5 * cliente.subtotal_5 || 0)}
+                ,00
+              </span>
               <div className="flex flex-col sm:flex-row justify-end gap-2">
                 <Link href={`/clientes/${cliente.id}`}>
                   <Button className="bg-green-700 text-white px-3 py-2 rounded w-full sm:w-auto flex gap-1 items-center justify-center hover:bg-green-600 duration-200">
