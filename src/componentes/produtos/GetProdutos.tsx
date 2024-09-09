@@ -8,21 +8,24 @@ import { putProdutosAction } from "@/actions/produtos/put-produtos-action";
 import tokenAction from "@/actions/login/get-token";
 import { url } from "@/app/api";
 import PesquisaProdutos from "@/componentes/categorias/PesquisaProdutos";
+import ProdutoDisponibilidade from "../categorias/ProdutoDisponibilidade";
+import ProdutoSituacao from "../categorias/ProdutoSituacao";
 
 const GetProdutoPromocao = () => {
   const [produtos, setProdutos] = useState([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [situacao, setSituacao] = useState<string>("promocao");
-  const [disponibilidade, setDisponibilidade] = useState<string>("sim");
   const [searchTerm, setSearchTerm] = useState<string>("");
+  const [pesquisaDisponibilidade, setpesquisaDisponibilidade] =
+    useState<string>("");
+  const [pesquisaSituacao, setpesquisaSituacao] = useState<string>("");
 
   useEffect(() => {
     const fetchProdutos = async () => {
       setLoading(true);
       setError(null);
       const token = await tokenAction();
-      const urlRequisicao = `${url}/wp-json/api/produto?situacao=${situacao}&disponibilidade=${disponibilidade}&_limit=128&q=${searchTerm}`;
+      const urlRequisicao = `${url}/wp-json/api/produto?&_limit=128&q=${searchTerm}&situacao=${pesquisaSituacao}&${pesquisaDisponibilidade}`;
 
       try {
         const response = await fetch(urlRequisicao, {
@@ -53,7 +56,7 @@ const GetProdutoPromocao = () => {
     };
 
     fetchProdutos();
-  }, [situacao, disponibilidade, searchTerm]);
+  }, [searchTerm, pesquisaDisponibilidade, pesquisaSituacao]);
 
   if (loading) return <p>Carregando...</p>;
   if (error) return <p className="text-center text-3xl mt-4 mb-20">{error}</p>;
@@ -107,24 +110,11 @@ const GetProdutoPromocao = () => {
         <h1 className="text-2xl">
           Selecione Abaixo a situação e disponibilidade do produto
         </h1>
-        <select
-          value={situacao}
-          onChange={(e) => setSituacao(e.target.value)}
-          className="border border-gray-300 p-2 rounded-md bg-gray-100 transition duration-200 focus:outline-none focus:border-red-500 focus:bg-white focus:shadow-outline w-80"
-        >
-          <option value="promocao">Promoção</option>
-          <option value="destaque">Destaque</option>
-          <option value="queima">Queima</option>
-        </select>
-        <select
-          value={disponibilidade}
-          onChange={(e) => setDisponibilidade(e.target.value)}
-          className="border border-gray-300 p-2 rounded-md bg-gray-100 transition duration-200 focus:outline-none focus:border-red-500 focus:bg-white focus:shadow-outline w-80"
-        >
-          <option value="sim">Disponível</option>
-          <option value="nao">Indisponível</option>
-        </select>
-        <PesquisaProdutos onSearch={(term) => setSearchTerm(term)} />
+        <div className="flex gap-2">
+          <PesquisaProdutos onSearch={(term) => setSearchTerm(term)} />
+          <ProdutoDisponibilidade onSearch={(term) => setSearchTerm(term)} />
+          <ProdutoSituacao onSearch={(term) => setSearchTerm(term)} />
+        </div>
       </div>
 
       <div className="flex flex-wrap  justify-center items-center gap-4 mx-auto my-8 max-w-screen-2xl px-4">

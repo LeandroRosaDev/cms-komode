@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Button } from "../form-componentes/Button";
 import Image from "next/image";
+import { deleteClientesAction } from "@/actions/cliente/delete-clientes-action";
 
 interface Cliente {
   id: string;
@@ -45,6 +46,11 @@ export default function GetClientes() {
   if (error) {
     return <div className="text-center p-4 text-red-500">Erro: {error}</div>;
   }
+
+  const handleDelete = async (clienteID: string) => {
+    await deleteClientesAction(clienteID);
+    setClientes(clientes.filter((cliente) => cliente.id !== clienteID));
+  };
 
   return (
     <div className="min-h-screen bg-gray-100 p-4">
@@ -99,17 +105,18 @@ export default function GetClientes() {
                     Ver Detalhes
                   </Button>
                 </Link>
-                <Link href={`/clientes/${cliente.id}`}>
-                  <Button className="bg-red-600 text-white px-3 py-2 rounded w-full sm:w-auto flex gap-1 items-center justify-center hover:bg-red-700">
-                    <Image
-                      src="/assets/icones/21.svg"
-                      alt="logotipo"
-                      width={20}
-                      height={20}
-                    />
-                    Excluir
-                  </Button>
-                </Link>
+                <Button
+                  className="bg-red-600 text-white px-3 py-2 rounded w-full sm:w-auto flex gap-1 items-center justify-center hover:bg-red-700"
+                  onClick={() => handleDelete(cliente.id)}
+                >
+                  <Image
+                    src="/assets/icones/21.svg"
+                    alt="logotipo"
+                    width={20}
+                    height={20}
+                  />
+                  Excluir
+                </Button>
               </div>
             </div>
           ))}

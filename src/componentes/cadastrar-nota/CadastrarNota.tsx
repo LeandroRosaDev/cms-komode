@@ -70,7 +70,7 @@ export default function CadastrarClientePage() {
       setFormData((prevFormData) => ({
         ...prevFormData,
         [name]: value,
-        numero_parcelas: "", // Reseta o campo número de parcelas
+        numero_parcelas: "",
       }));
     } else {
       setFormData((prevFormData) => ({

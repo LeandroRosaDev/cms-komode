@@ -13,7 +13,7 @@ const PesquisaProdutos = ({ onSearch }: SearchBarProps) => {
   };
 
   return (
-    <div className="flex justify-center items-center m-10 gap-2">
+    <div className="flex justify-center items-center gap-2">
       <input
         type="text"
         value={searchTerm}
