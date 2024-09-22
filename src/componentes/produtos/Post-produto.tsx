@@ -15,13 +15,14 @@ export default function PostProduto() {
   const [produtoCod, setProdutoCod] = useState("");
   const [cor, setCor] = useState("");
 
-  const formatPrice = (value) => {
-    const formattedValue = value.toFixed(2).replace(".", ",");
-    return `R$ ${formattedValue}`;
+  // Função para formatar preço em formato brasileiro, adicionando "R$"
+  const formatPrice = (value: number) => {
+    return `R$ ${value.toFixed(2).replace(".", ",")}`;
   };
 
-  const precoParcelado = formatPrice(preco * 1.0269 * 1.05) / 12;
-  const precoOriginal = formatPrice(preco * 1.1);
+  // Cálculo do preço parcelado e original
+  const precoParcelado = preco > 0 ? (preco * 1.0269 * 1.05) / 12 : 0;
+  const precoOriginal = preco > 0 ? preco * 1.1 : 0;
   const precoFormatted = formatPrice(preco);
 
   const link_1 = `//api.whatsapp.com/send?phone=5521978991540&text=Olá tudo bem? Eu estava olhando o site de vocês e gostaria de mais informações sobre o produto ${nome} ${produtoCod} ${cor}, poderia me passar mais informações sobre?`;
@@ -44,9 +45,12 @@ export default function PostProduto() {
     formData.append("categoria", categoriaSelecionada || "");
     formData.append("sub_categoria", subcategoriaSelecionada || "");
     formData.append("descricao", event.currentTarget.descricao?.value || "");
+
+    // Agora passamos os valores corretamente com "R$" incluído
     formData.append("preco", precoFormatted);
-    formData.append("preco_original", precoOriginal);
-    formData.append("preco_parcelado", precoParcelado);
+    formData.append("preco_original", formatPrice(precoOriginal));
+    formData.append("preco_parcelado", formatPrice(precoParcelado));
+
     formData.append("altura", event.currentTarget.altura?.value || "");
     formData.append("largura", event.currentTarget.largura?.value || "");
     formData.append("cor", cor || "");
@@ -251,13 +255,13 @@ export default function PostProduto() {
           type="hidden"
           id="preco_original"
           name="preco_original"
-          value={precoOriginal}
+          value={formatPrice(precoOriginal)}
         />
         <input
           type="hidden"
           id="preco_parcelado"
           name="preco_parcelado"
-          value={precoParcelado}
+          value={formatPrice(precoParcelado)}
         />
         <input
           type="text"
@@ -300,6 +304,7 @@ export default function PostProduto() {
           <option value="Capuccino">Capuccino</option>
           <option value="Cinza/Grafite">Cinza/Grafite</option>
           <option value="Mel">Mel</option>
+          <option value="IMG">IMG</option>
         </select>
         <input type="hidden" id="link_1" name="link_1" value={link_1} />
         <input

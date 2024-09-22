@@ -44,6 +44,7 @@ export type Produto = {
   preco_parcelado?: string;
   preco_original?: string;
   fotos: { src: string }[];
+  customFotoSrc: string;
 };
 export type PageParams = {
   params: {

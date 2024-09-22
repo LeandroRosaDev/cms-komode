@@ -36,12 +36,8 @@ export default async function ServerProdutoPage({ params }: PageParams) {
         <ClientProdutoPage data={data} />
       </div>
 
-      {/* Passar as informações de imagens para o componente do cliente */}
-      <ClientProdutoImages
-        fotos={data.fotos}
-        produtoId={params.produto} // Certifique-se de que `params.produto` é o slug ou ID correto
-        token={token}
-      />
+      {/* Passando o código do produto (por exemplo, SAZ) para o componente de imagem */}
+      <ClientProdutoImages codigo={data.produto_cod} tamanho={data.fotos} />
     </section>
   );
 }

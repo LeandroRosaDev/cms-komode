@@ -1,4 +1,3 @@
-// @ts-nocheck
 "use client";
 import { useEffect, useState } from "react";
 import Link from "next/link";
@@ -10,9 +9,10 @@ import { url } from "@/app/api";
 import PesquisaProdutos from "@/componentes/categorias/PesquisaProdutos";
 import ProdutoDisponibilidade from "../categorias/ProdutoDisponibilidade";
 import ProdutoSituacao from "../categorias/ProdutoSituacao";
+import { Produto } from "@/Types"; // Importando a tipagem de Produto
 
 const GetProdutoPromocao = () => {
-  const [produtos, setProdutos] = useState([]);
+  const [produtos, setProdutos] = useState<Produto[]>([]); // Tipando como array de Produto
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState<string>("");
@@ -39,13 +39,20 @@ const GetProdutoPromocao = () => {
           throw new Error("Falha ao buscar dados");
         }
 
-        const data = await response.json();
-        console.log("Dados recebidos:", data);
+        const data: Produto[] = await response.json();
 
         if (!data || data.length === 0) {
           setError("Nenhum produto encontrado em estoque.");
         } else {
-          setProdutos(data);
+          const updatedData = await Promise.all(
+            data.map(async (produto: Produto) => {
+              const customImageSrc = await fetchCustomImage(
+                produto.produto_cod
+              );
+              return { ...produto, customFotoSrc: customImageSrc };
+            })
+          );
+          setProdutos(updatedData);
         }
       } catch (error: any) {
         console.error("Erro na requisição:", error);
@@ -58,16 +65,35 @@ const GetProdutoPromocao = () => {
     fetchProdutos();
   }, [searchTerm, pesquisaDisponibilidade, pesquisaSituacao]);
 
+  const fetchCustomImage = async (
+    produto_cod: string
+  ): Promise<string | null> => {
+    try {
+      const response = await fetch(
+        `https://apikomode.altuori.com/wp-json/api/produto?cor=img&produto_cod=${produto_cod}`
+      );
+      if (response.ok) {
+        const data = await response.json();
+        if (data && data[0] && data[0].fotos && data[0].fotos.length > 0) {
+          return data[0].fotos[0].src; // Retorna a primeira imagem encontrada
+        }
+      }
+    } catch (error) {
+      console.error("Erro ao buscar imagem customizada", error);
+    }
+    return null;
+  };
+
   if (loading) return <p>Carregando...</p>;
   if (error) return <p className="text-center text-3xl mt-4 mb-20">{error}</p>;
 
-  const formatPrice = (value: number) => {
+  const formatPrice = (value: number): string => {
     if (isNaN(value)) return "R$ 0,00";
     const formattedValue = value.toFixed(2).replace(".", ",");
     return `R$ ${formattedValue}`;
   };
 
-  const cleanPriceInput = (input: string) => {
+  const cleanPriceInput = (input: string): number => {
     return parseFloat(input.replace(/[^\d,]/g, "").replace(",", "."));
   };
 
@@ -75,7 +101,7 @@ const GetProdutoPromocao = () => {
     produtoId: string,
     field: string,
     value: string
-  ) => {
+  ): Promise<void> => {
     const updatedProduct = produtos.find((produto) => produto.id === produtoId);
     if (updatedProduct) {
       if (field === "preco") {
@@ -99,7 +125,7 @@ const GetProdutoPromocao = () => {
     }
   };
 
-  const handleDelete = async (produtoId: string) => {
+  const handleDelete = async (produtoId: string): Promise<void> => {
     await deleteProdutosAction(produtoId);
     setProdutos(produtos.filter((produto) => produto.id !== produtoId));
   };
@@ -117,30 +143,24 @@ const GetProdutoPromocao = () => {
         </div>
       </div>
 
-      <div className="flex flex-wrap  justify-center items-center gap-4 mx-auto my-8 max-w-screen-2xl px-4">
+      <div className="flex flex-wrap justify-center items-center gap-4 mx-auto my-8 max-w-screen-2xl px-4">
         {produtos.length === 0 ? (
           <p>Nenhum produto encontrado em estoque.</p>
         ) : (
-          produtos.map((produto) => (
+          produtos.map((produto: Produto) => (
             <div
               className="flex flex-col items-center justify-center relative transform transition duration-400 hover:scale-105 max-w-xs bg-white p-4 rounded-2xl shadow"
               key={produto.id}
             >
-              {produto.fotos && produto.fotos.length > 0 && (
-                <Link href={`/produto/${produto.id}`} className="w-72">
-                  <Image
-                    className="opacity-100 block w-auto h-auto transition-opacity duration-500 ease-in-out hover:opacity-30"
-                    src={
-                      produto.fotos[1]
-                        ? produto.fotos[1].src
-                        : produto.fotos[0].src
-                    }
-                    alt={`Imagem de ${produto.nome}`}
-                    width={300}
-                    height={250}
-                  />
-                </Link>
-              )}
+              <Link href={`/produto/${produto.id}`} className="w-72">
+                <Image
+                  className="opacity-100 block w-auto h-auto rounded-2xl transition-opacity duration-500 ease-in-out hover:opacity-30"
+                  src={produto.customFotoSrc || produto.fotos[0]?.src}
+                  alt={`Imagem de ${produto.nome}`}
+                  width={300}
+                  height={250}
+                />
+              </Link>
 
               <div className="p-2 w-full flex flex-col items-start overflow-hidden">
                 <h1 className="text-center text-base m-0 truncate">
@@ -214,6 +234,7 @@ const GetProdutoPromocao = () => {
                     Indisponível
                   </label>
                 </div>
+
                 <button
                   className="bg-red-700 text-white py-2 px-4 mx-auto rounded flex items-center justify-center gap-1"
                   onClick={() => handleDelete(produto.id)}

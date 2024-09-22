@@ -12,7 +12,16 @@ interface ProductData {
   preco: number | string;
   preco_original: string;
   preco_parcelado: string;
-  [key: string]: any;
+  disponibilidade: string;
+  situacao: string;
+  rangedevalor: string;
+  produto_cod: string;
+  categoria: string;
+  sub_categoria: string;
+  descricao: string;
+  profundidade_aberto: string;
+  altura: string;
+  largura: string;
 }
 
 interface ClientProdutoPageProps {
@@ -20,40 +29,53 @@ interface ClientProdutoPageProps {
 }
 
 export default function ClientProdutoPage({ data }: ClientProdutoPageProps) {
+  // Função para formatar preço
   const formatPrice = (value: number) => {
-    if (isNaN(value)) return "R$ 0,00";
-    const formattedValue = value.toFixed(2).replace(".", ",");
-    return `R$ ${formattedValue}`;
+    return `R$ ${value.toFixed(2).replace(".", ",")}`;
   };
 
   const cleanPriceInput = (input: string) => {
     return parseFloat(input.replace(/[^\d,]/g, "").replace(",", "."));
   };
 
-  // Inicializar o estado com o valor existente do produto
-  const initialPreco = formatPrice(cleanPriceInput(data.preco.toString()) || 0);
-  const [preco, setPreco] = useState<string>(initialPreco);
+  // Estado inicial dos campos
+  const [preco, setPreco] = useState<string>(
+    formatPrice(cleanPriceInput(data.preco.toString()) || 0)
+  );
+  const [nome, setNome] = useState(data.produto_cod);
+  const [nomeLong, setNomeLong] = useState(data.nome_long);
+  const [cor, setCor] = useState(data.cor);
+  const [disponibilidade, setDisponibilidade] = useState(data.disponibilidade);
+  const [situacao, setSituacao] = useState(data.situacao);
+  const [rangeDeValor, setRangeDeValor] = useState(data.rangedevalor);
+  const [categoriaSelecionada, setCategoriaSelecionada] = useState(
+    data.categoria
+  );
+  const [subcategoriaSelecionada, setSubcategoriaSelecionada] = useState(
+    data.sub_categoria
+  );
+  const [descricao, setDescricao] = useState(data.descricao);
+  const [profundidadeAberto, setProfundidadeAberto] = useState(
+    data.profundidade_aberto
+  );
+  const [altura, setAltura] = useState(data.altura);
+  const [largura, setLargura] = useState(data.largura);
 
   const precoValue = cleanPriceInput(preco);
-  const precoParcelado = formatPrice(precoValue / 10);
+  const precoParcelado = formatPrice((precoValue * 1.0269 * 1.05) / 12);
   const precoOriginal = formatPrice(precoValue * 1.1);
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const precoNumber = cleanPriceInput(preco);
-    if (!preco || isNaN(precoNumber)) {
-      alert("Preço inválido. Por favor, insira um valor válido.");
-      return;
+  // Função chamada ao sair de um campo (onBlur)
+  const handleBlur = async (field: string, value: any) => {
+    const updatedProduct = { ...data, [field]: value };
+
+    // Caso o campo alterado seja o preço, atualizamos também o preço original e parcelado
+    if (field === "preco") {
+      updatedProduct.preco_original = precoOriginal;
+      updatedProduct.preco_parcelado = precoParcelado;
     }
 
-    const formData = new FormData(event.currentTarget);
-    formData.set("preco", formatPrice(precoNumber));
-    formData.set("preco_original", precoOriginal);
-    formData.set("preco_parcelado", precoParcelado);
-    const productData: ProductData = Object.fromEntries(
-      formData.entries()
-    ) as unknown as ProductData;
-    await putProdutosAction(productData, data.id);
+    await putProdutosAction(updatedProduct, data.id);
   };
 
   useEffect(() => {
@@ -62,20 +84,26 @@ export default function ClientProdutoPage({ data }: ClientProdutoPageProps) {
   }, [precoOriginal, precoParcelado]);
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4 flex gap-3 items-center">
+    <form className="space-y-4 flex gap-3 items-center flex-wrap">
       <input type="hidden" name="id" value={data.id} />
+
+      {/* Nome */}
       <div className="w-52">
         <label htmlFor="nome" className="block text-gray-700">
-          Nome
+          Código
         </label>
         <input
           type="text"
           id="nome"
           name="nome"
-          defaultValue={data.nome}
+          value={nome}
+          onChange={(e) => setNome(e.target.value)}
+          onBlur={() => handleBlur("produto_cod", nome)}
           className="border border-gray-300 w-full p-3 rounded-md bg-gray-100 transition duration-200 focus:outline-none focus:border-red-500 focus:bg-white focus:shadow-outline"
         />
       </div>
+
+      {/* Nome Longo */}
       <div className="w-52">
         <label htmlFor="nome_long" className="block text-gray-700">
           Nome Longo
@@ -84,22 +112,37 @@ export default function ClientProdutoPage({ data }: ClientProdutoPageProps) {
           type="text"
           id="nome_long"
           name="nome_long"
-          defaultValue={data.nome_long}
+          value={nomeLong}
+          onChange={(e) => setNomeLong(e.target.value)}
+          onBlur={() => handleBlur("nome_long", nomeLong)}
           className="border border-gray-300 w-full p-3 rounded-md bg-gray-100 transition duration-200 focus:outline-none focus:border-red-500 focus:bg-white focus:shadow-outline"
         />
       </div>
+
+      {/* Cor - campo select */}
       <div className="w-52">
         <label htmlFor="cor" className="block text-gray-700">
           Cor
         </label>
-        <input
-          type="text"
+        <select
           id="cor"
           name="cor"
-          defaultValue={data.cor}
+          value={cor}
+          onChange={(e) => setCor(e.target.value)}
+          onBlur={() => handleBlur("cor", cor)}
           className="border border-gray-300 w-full p-3 rounded-md bg-gray-100 transition duration-200 focus:outline-none focus:border-red-500 focus:bg-white focus:shadow-outline"
-        />
+        >
+          <option value="">Selecione a Cor</option>
+          <option value="Azul">Azul</option>
+          <option value="Vermelho">Vermelho</option>
+          <option value="Preto">Preto</option>
+          <option value="Cinza">Cinza</option>
+          <option value="Marrom">Marrom</option>
+          {/* Adicione as outras cores aqui */}
+        </select>
       </div>
+
+      {/* Preço */}
       <div className="w-52">
         <label htmlFor="preco" className="block text-gray-700">
           Preço
@@ -110,78 +153,194 @@ export default function ClientProdutoPage({ data }: ClientProdutoPageProps) {
           name="preco"
           value={preco}
           onChange={(e) => setPreco(e.target.value)}
-          onBlur={() => setPreco(formatPrice(cleanPriceInput(preco)))}
+          onBlur={() => {
+            setPreco(formatPrice(cleanPriceInput(preco)));
+            handleBlur("preco", preco);
+          }}
           className="border border-gray-300 w-full p-3 rounded-md bg-gray-100 transition duration-200 focus:outline-none focus:border-red-500 focus:bg-white focus:shadow-outline"
         />
       </div>
-      <div className="w-52 hidden">
-        <label htmlFor="preco_original" className="block text-gray-700">
-          Preço Original
-        </label>
-        <input
-          type="text"
-          id="preco_original"
-          name="preco_original"
-          value={precoOriginal}
-          readOnly
-          className="border border-gray-300 w-full p-3 rounded-md bg-gray-100 transition duration-200 focus:outline-none focus:border-red-500 focus:bg-white focus:shadow-outline"
-        />
-      </div>
-      <div className="w-52 hidden">
-        <label htmlFor="preco_parcelado" className="block text-gray-700">
-          Preço Parcelado
-        </label>
-        <input
-          type="text"
-          id="preco_parcelado"
-          name="preco_parcelado"
-          value={precoParcelado}
-          readOnly
-          className="border border-gray-300 w-52 p-3 rounded-md bg-gray-100 transition duration-200 focus:outline-none focus:border-red-500 focus:bg-white focus:shadow-outline"
-        />
-      </div>
+
+      <input
+        type="hidden"
+        id="preco_original"
+        name="preco_original"
+        value={precoOriginal}
+        readOnly
+        className="border border-gray-300 w-full p-3 rounded-md bg-gray-100 transition duration-200 focus:outline-none focus:border-red-500 focus:bg-white focus:shadow-outline"
+      />
+
+      <input
+        type="hidden"
+        id="preco_parcelado"
+        name="preco_parcelado"
+        value={precoParcelado}
+        readOnly
+        className="border border-gray-300 w-full p-3 rounded-md bg-gray-100 transition duration-200 focus:outline-none focus:border-red-500 focus:bg-white focus:shadow-outline"
+      />
+
+      {/* Disponibilidade - campo select */}
       <div className="w-52">
         <label htmlFor="disponibilidade" className="block text-gray-700">
           Disponibilidade
         </label>
-        <input
-          type="text"
+        <select
           id="disponibilidade"
           name="disponibilidade"
-          defaultValue={data.disponibilidade}
-          className="border border-gray-300 w-52 p-3 rounded-md bg-gray-100 transition duration-200 focus:outline-none focus:border-red-500 focus:bg-white focus:shadow-outline"
-        />
+          value={disponibilidade}
+          onChange={(e) => setDisponibilidade(e.target.value)}
+          onBlur={() => handleBlur("disponibilidade", disponibilidade)}
+          className="border border-gray-300 w-full p-3 rounded-md bg-gray-100 transition duration-200 focus:outline-none focus:border-red-500 focus:bg-white focus:shadow-outline"
+        >
+          <option value="sim">Disponível</option>
+          <option value="nao">Indisponível</option>
+        </select>
       </div>
+
+      {/* Situação - campo select */}
       <div className="w-52">
         <label htmlFor="situacao" className="block text-gray-700">
           Situação
         </label>
-        <input
-          type="text"
+        <select
           id="situacao"
           name="situacao"
-          defaultValue={data.situacao}
-          className="border border-gray-300 w-52 p-3 rounded-md bg-gray-100 transition duration-200 focus:outline-none focus:border-red-500 focus:bg-white focus:shadow-outline"
-        />
+          value={situacao}
+          onChange={(e) => setSituacao(e.target.value)}
+          onBlur={() => handleBlur("situacao", situacao)}
+          className="border border-gray-300 w-full p-3 rounded-md bg-gray-100 transition duration-200 focus:outline-none focus:border-red-500 focus:bg-white focus:shadow-outline"
+        >
+          <option value="destaque">Destaque</option>
+          <option value="promocao">Promoção</option>
+          <option value="queima">Queima de estoque</option>
+        </select>
       </div>
+
+      {/* Range de valor - campo select */}
       <div className="w-52">
         <label htmlFor="rangedevalor" className="block text-gray-700">
           Range de Valor
         </label>
-        <input
-          type="text"
+        <select
           id="rangedevalor"
           name="rangedevalor"
-          defaultValue={data.rangedevalor}
-          className="border border-gray-300 w-52 p-3 rounded-md bg-gray-100 transition duration-200 focus:outline-none focus:border-red-500 focus:bg-white focus:shadow-outline"
+          value={rangeDeValor}
+          onChange={(e) => setRangeDeValor(e.target.value)}
+          onBlur={() => handleBlur("rangedevalor", rangeDeValor)}
+          className="border border-gray-300 w-full p-3 rounded-md bg-gray-100 transition duration-200 focus:outline-none focus:border-red-500 focus:bg-white focus:shadow-outline"
+        >
+          <option value="499">Menor de R$500,00</option>
+          <option value="999">Menor de R$1000,00</option>
+          {/* Adicione outros ranges aqui */}
+        </select>
+      </div>
+
+      {/* Categoria - campo select */}
+      <div className="w-52">
+        <label htmlFor="categoria" className="block text-gray-700">
+          Categoria
+        </label>
+        <select
+          id="categoria"
+          name="categoria"
+          value={categoriaSelecionada}
+          onChange={(e) => setCategoriaSelecionada(e.target.value)}
+          onBlur={() => handleBlur("categoria", categoriaSelecionada)}
+          className="border border-gray-300 w-full p-3 rounded-md bg-gray-100 transition duration-200 focus:outline-none focus:border-red-500 focus:bg-white focus:shadow-outline"
+        >
+          <option value="Sala de estar">Sala de estar</option>
+          <option value="Cozinha">Cozinha</option>
+          {/* Adicione outras categorias aqui */}
+        </select>
+      </div>
+
+      {/* Subcategoria - campo select */}
+      <div className="w-52">
+        <label htmlFor="sub_categoria" className="block text-gray-700">
+          Sub Categoria
+        </label>
+        <select
+          id="sub_categoria"
+          name="sub_categoria"
+          value={subcategoriaSelecionada}
+          onChange={(e) => setSubcategoriaSelecionada(e.target.value)}
+          onBlur={() => handleBlur("sub_categoria", subcategoriaSelecionada)}
+          className="border border-gray-300 w-full p-3 rounded-md bg-gray-100 transition duration-200 focus:outline-none focus:border-red-500 focus:bg-white focus:shadow-outline"
+        >
+          {categoriaSelecionada === "Sala de estar" && (
+            <>
+              <option value="Sofa Retratil">Sofá Retrátil</option>
+              <option value="Sofa Canto">Sofá de Canto</option>
+              {/* Adicione outras subcategorias */}
+            </>
+          )}
+          {/* Adicione subcategorias para outras categorias */}
+        </select>
+      </div>
+
+      {/* Descrição */}
+      <div className="w-52">
+        <label htmlFor="descricao" className="block text-gray-700">
+          Descrição
+        </label>
+        <input
+          type="text"
+          id="descricao"
+          name="descricao"
+          value={descricao}
+          onChange={(e) => setDescricao(e.target.value)}
+          onBlur={() => handleBlur("descricao", descricao)}
+          className="border border-gray-300 w-full p-3 rounded-md bg-gray-100 transition duration-200 focus:outline-none focus:border-red-500 focus:bg-white focus:shadow-outline"
         />
       </div>
-      <button
-        type="submit"
-        className=" bg-red-700 text-white p-2 rounded-md transition duration-320 hover:bg-red-600 focus:outline-none focus:shadow-outline text-center  w-44 h-10 -my-5"
-      >
-        Salvar Alterações
-      </button>
+
+      {/* Profundidade Aberto */}
+      <div className="w-52">
+        <label htmlFor="profundidade_aberto" className="block text-gray-700">
+          Profundidade Aberto
+        </label>
+        <input
+          type="text"
+          id="profundidade_aberto"
+          name="profundidade_aberto"
+          value={profundidadeAberto}
+          onChange={(e) => setProfundidadeAberto(e.target.value)}
+          onBlur={() => handleBlur("profundidade_aberto", profundidadeAberto)}
+          className="border border-gray-300 w-full p-3 rounded-md bg-gray-100 transition duration-200 focus:outline-none focus:border-red-500 focus:bg-white focus:shadow-outline"
+        />
+      </div>
+
+      {/* Altura */}
+      <div className="w-52">
+        <label htmlFor="altura" className="block text-gray-700">
+          Altura
+        </label>
+        <input
+          type="text"
+          id="altura"
+          name="altura"
+          value={altura}
+          onChange={(e) => setAltura(e.target.value)}
+          onBlur={() => handleBlur("altura", altura)}
+          className="border border-gray-300 w-full p-3 rounded-md bg-gray-100 transition duration-200 focus:outline-none focus:border-red-500 focus:bg-white focus:shadow-outline"
+        />
+      </div>
+
+      {/* Largura */}
+      <div className="w-52">
+        <label htmlFor="largura" className="block text-gray-700">
+          Largura
+        </label>
+        <input
+          type="text"
+          id="largura"
+          name="largura"
+          value={largura}
+          onChange={(e) => setLargura(e.target.value)}
+          onBlur={() => handleBlur("largura", largura)}
+          className="border border-gray-300 w-full p-3 rounded-md bg-gray-100 transition duration-200 focus:outline-none focus:border-red-500 focus:bg-white focus:shadow-outline"
+        />
+      </div>
     </form>
   );
 }
