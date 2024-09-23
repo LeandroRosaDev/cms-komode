@@ -10,6 +10,72 @@ export default function SaveCliente({ cliente }) {
   const [saidaHora, setSaidaHora] = useState("");
   const [originalTitle, setOriginalTitle] = useState("");
 
+  // const formatPhoneNumber = (phoneNumber) => {
+  //   // Remove todos os caracteres que não são dígitos e adiciona "55" no início
+  //   const cleanedNumber = phoneNumber.replace(/\D/g, ""); // Remove tudo que não é número
+  //   const formattedNumber = `55${cleanedNumber}`;
+
+  //   return formattedNumber;
+  // };
+
+  // const telefoneFormatado = formatPhoneNumber(cliente.telefone_2);
+  const telefoneFormatado = 5521998404833;
+
+  const total =
+    (cliente.qtd_1 * cliente.subtotal_1 || 0) +
+    (cliente.qtd_2 * cliente.subtotal_2 || 0) +
+    (cliente.qtd_3 * cliente.subtotal_3 || 0) +
+    (cliente.qtd_4 * cliente.subtotal_4 || 0) +
+    (cliente.qtd_5 * cliente.subtotal_5 || 0);
+
+  const pagamento = cliente.numero_parcelas
+    ? `Parcelamento em ${cliente.numero_parcelas}x de R$${Math.ceil(
+        ((cliente.qtd_1 * cliente.subtotal_1 || 0) +
+          (cliente.qtd_2 * cliente.subtotal_2 || 0) +
+          (cliente.qtd_3 * cliente.subtotal_3 || 0) +
+          (cliente.qtd_4 * cliente.subtotal_4 || 0) +
+          (cliente.qtd_5 * cliente.subtotal_5 || 0)) /
+          cliente.numero_parcelas
+      )},00 no cartão de crédito`
+    : "Pagamento à vista";
+
+  const produtos = [
+    cliente.produto_1 && `👉🏻 ${cliente.produto_1} (Qtd: ${cliente.qtd_1})`,
+    cliente.produto_2 && `👉🏻 ${cliente.produto_2} (Qtd: ${cliente.qtd_2})`,
+    cliente.produto_3 && `👉🏻 ${cliente.produto_3} (Qtd: ${cliente.qtd_3})`,
+    cliente.produto_4 && `👉🏻 ${cliente.produto_4} (Qtd: ${cliente.qtd_4})`,
+    cliente.produto_5 && `👉🏻 ${cliente.produto_5} (Qtd: ${cliente.qtd_5})`,
+  ]
+    .filter(Boolean) // Remove entradas nulas ou falsas
+    .join("\n");
+
+  const whatsappMessage = `
+    👩🏻‍🦱 Cliente
+    👉🏻 ${cliente.nome}
+    
+    📍 Endereço
+    👉🏻 ${cliente.rua}, ${cliente.numero} - ${cliente.bairro} - ${cliente.cidade}
+    
+    🚩 Ponto de Referência
+    👉🏻 ${cliente.ponto_referencia}
+    
+    ☎️ Telefones
+    👉🏻 ${cliente.telefone_1}
+    👉🏻 ${cliente.telefone_2}
+    
+    🛋️ Produtos
+    ${produtos}
+
+    💰 Forma de Pagamento
+    ${pagamento}
+
+    💰 Total
+    👉🏻 R$ ${total}`;
+
+  const whatsappLink = `https://api.whatsapp.com/send?phone=${telefoneFormatado}&text=${encodeURIComponent(
+    whatsappMessage
+  )}`;
+
   useEffect(() => {
     // Ao carregar a página, atualiza a "Data Saída" e "Hora Saída"
     const currentDate = new Date();
@@ -112,7 +178,7 @@ export default function SaveCliente({ cliente }) {
               <div className="bg-gray-50 p-4 rounded-lg border border-gray-300 col-span-3">
                 <h2 className="font-bold text-gray-700">Produto 1:</h2>
                 <p>
-                  {cliente.produto_1} (Qtd: {cliente.qtd_1})
+                  {cliente.desc_1} (Qtd: {cliente.qtd_1})
                 </p>
               </div>
             )}
@@ -120,7 +186,7 @@ export default function SaveCliente({ cliente }) {
               <div className="bg-gray-50 p-4 rounded-lg border border-gray-300 col-span-3">
                 <h2 className="font-bold text-gray-700">Produto 2:</h2>
                 <p>
-                  {cliente.produto_2} (Qtd: {cliente.qtd_2})
+                  {cliente.desc_2} (Qtd: {cliente.qtd_2})
                 </p>
               </div>
             )}
@@ -128,7 +194,7 @@ export default function SaveCliente({ cliente }) {
               <div className="bg-gray-50 p-4 rounded-lg border border-gray-300 col-span-3">
                 <h2 className="font-bold text-gray-700">Produto 3:</h2>
                 <p>
-                  {cliente.produto_3} (Qtd: {cliente.qtd_3})
+                  {cliente.desc_3} (Qtd: {cliente.qtd_3})
                 </p>
               </div>
             )}
@@ -136,7 +202,7 @@ export default function SaveCliente({ cliente }) {
               <div className="bg-gray-50 p-4 rounded-lg border border-gray-300 col-span-3">
                 <h2 className="font-bold text-gray-700">Produto 4:</h2>
                 <p>
-                  {cliente.produto_4} (Qtd: {cliente.qtd_4})
+                  {cliente.desc_4} (Qtd: {cliente.qtd_4})
                 </p>
               </div>
             )}
@@ -144,7 +210,7 @@ export default function SaveCliente({ cliente }) {
               <div className="bg-gray-50 p-4 rounded-lg border border-gray-300 col-span-3">
                 <h2 className="font-bold text-gray-700">Produto 5:</h2>
                 <p>
-                  {cliente.produto_5} (Qtd: {cliente.qtd_5})
+                  {cliente.desc_5} (Qtd: {cliente.qtd_5})
                 </p>
               </div>
             )}
@@ -161,26 +227,16 @@ export default function SaveCliente({ cliente }) {
                 <p>{cliente.numero_parcelas}</p>
               </div>
             )}
-            {cliente.total && (
-              <div className="bg-gray-50 p-4 rounded-lg border border-gray-300 col-span-3 sm:col-span-1">
-                <h2 className="font-bold text-gray-700">Total:</h2>
-                <p>
-                  R$
-                  {(
-                    (cliente.qtd_1 * cliente.subtotal_1 || 0) +
-                    (cliente.qtd_2 * cliente.subtotal_2 || 0) +
-                    (cliente.qtd_3 * cliente.subtotal_3 || 0) +
-                    (cliente.qtd_4 * cliente.subtotal_4 || 0) +
-                    (cliente.qtd_5 * cliente.subtotal_5 || 0)
-                  ).toFixed(2)}
-                </p>
-              </div>
-            )}
+
+            <div className="bg-gray-50 p-4 rounded-lg border border-gray-300 col-span-3 sm:col-span-1">
+              <h2 className="font-bold text-gray-700">Total:</h2>
+              <p>R${total},00</p>
+            </div>
           </div>
-          <div className="flex justify-end mt-4">
+          <div className="flex mt-4 justify-center">
             <button
               onClick={handleSave}
-              className="bg-green-700 text-white mx-auto px-4 py-4 rounded-lg shadow hover:bg-green-600 transition-colors duration-300 hidden sm:flex items-center justify-center gap-2"
+              className="bg-green-700 text-white mx-2 px-4 py-4 rounded-lg shadow hover:bg-green-600 transition-colors duration-300 hidden sm:flex items-center justify-center gap-2"
             >
               <Image
                 src="/assets/icones/27.svg"
@@ -190,6 +246,13 @@ export default function SaveCliente({ cliente }) {
               />
               Emitir Nota
             </button>
+            <a
+              href={whatsappLink}
+              target="_blank"
+              className="bg-green-700 mx-2 text-white px-4 py-4 rounded-lg shadow hover:bg-green-600 transition-colors duration-300 gap-2"
+            >
+              Enviar Entregador
+            </a>
           </div>
         </div>
       </div>
@@ -477,11 +540,7 @@ export default function SaveCliente({ cliente }) {
               </span>
               <span className="block border-r border-black p-1">
                 R$
-                {(cliente.qtd_1 * cliente.subtotal_1 || 0) +
-                  (cliente.qtd_2 * cliente.subtotal_2 || 0) +
-                  (cliente.qtd_3 * cliente.subtotal_3 || 0) +
-                  (cliente.qtd_4 * cliente.subtotal_4 || 0) +
-                  (cliente.qtd_5 * cliente.subtotal_5 || 0)}
+                {total}
                 ,00
               </span>
             </div>
@@ -513,18 +572,7 @@ export default function SaveCliente({ cliente }) {
         <div className="border border-black h-36 p-2">
           <span className="block ">Observações:</span>
           {cliente.numero_parcelas && (
-            <span className="block ">
-              Parcelamento em {cliente.numero_parcelas}x de R$
-              {Math.ceil(
-                ((cliente.qtd_1 * cliente.subtotal_1 || 0) +
-                  (cliente.qtd_2 * cliente.subtotal_2 || 0) +
-                  (cliente.qtd_3 * cliente.subtotal_3 || 0) +
-                  (cliente.qtd_4 * cliente.subtotal_4 || 0) +
-                  (cliente.qtd_5 * cliente.subtotal_5 || 0)) /
-                  cliente.numero_parcelas
-              )}
-              ,00 no cartão de crédito
-            </span>
+            <span className="block ">{pagamento}</span>
           )}
           {cliente.ponto_referencia && (
             <span className="block ">
