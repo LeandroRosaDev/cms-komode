@@ -34,7 +34,7 @@ const CategoriasPage = ({ params }: PageParams) => {
   useEffect(() => {
     const fetchProdutos = async () => {
       const token = await tokenAction();
-      const url = `https://apikomode.altuori.com/wp-json/api/produto?sub_categoria=${params.categorias}&_limit=120&largura=${pesquisaMedida}&cor=${pesquisaCor}&disponibilidade=${pesquisaDisponibilidade}&situacao=${pesquisaSituacao}&q=${pesquisaNome}`;
+      const url = `https://apikomode.altuori.com/wp-json/api/produto?sub_categoria=${params.categorias}&_limit=1200&largura=${pesquisaMedida}&cor=${pesquisaCor}&disponibilidade=${pesquisaDisponibilidade}&situacao=${pesquisaSituacao}&q=${pesquisaNome}`;
 
       try {
         const response = await fetch(url, {

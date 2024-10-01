@@ -50,6 +50,10 @@ export default function SaveCliente({ cliente }) {
     .join("\n");
 
   const whatsappMessage = `
+
+    📃 Nota Nº
+    👉🏻 ${cliente.numero_nota}
+
     👩🏻‍🦱 Cliente
     👉🏻 ${cliente.nome}
     
