@@ -16,7 +16,7 @@ export default function CadastrarClientePage() {
     cep: "",
     cidade: "",
     ponto_referencia: "",
-    data_emissao: "",
+    data_emissao: "", // Inicialmente vazio
     produto_1: "",
     desc_1: "",
     qtd_1: "1",
@@ -47,16 +47,17 @@ export default function CadastrarClientePage() {
   const [numProdutos, setNumProdutos] = useState(1);
 
   const formatCPF = (cpf: string) => {
-    const cleanCPF = cpf.replace(/\D/g, ""); // Remove todos os caracteres que não são números
+    const cleanCPF = cpf.replace(/\D/g, "");
     return cleanCPF.replace(/(\d{3})(\d{3})(\d{3})(\d{2})$/, "$1.$2.$3-$4");
   };
 
   const formatPhoneNumber = (phone: string) => {
-    const cleanPhone = phone.replace(/\D/g, ""); // Remove todos os caracteres que não são números
+    const cleanPhone = phone.replace(/\D/g, "");
     return cleanPhone.replace(/^(\d{2})(\d{5})(\d{4})$/, "($1) $2-$3");
   };
+
   const formatCEP = (cep: string) => {
-    const cleanCEP = cep.replace(/\D/g, ""); // Remove todos os caracteres que não são números
+    const cleanCEP = cep.replace(/\D/g, "");
     return cleanCEP.replace(/^(\d{5})(\d{3})$/, "$1-$2");
   };
 
@@ -83,8 +84,11 @@ export default function CadastrarClientePage() {
   const handleSubmit = async (event: any) => {
     event.preventDefault();
 
-    // Formata a data para "data_emissao" como "dd/mm/yyyy"
-    const currentDate = new Date();
+    // Verifica se "data_emissao" foi fornecida ou usa a data atual se estiver vazia
+    const currentDate = formData.data_emissao
+      ? new Date(formData.data_emissao)
+      : new Date();
+
     const formattedEmissaoDate = `${currentDate
       .getDate()
       .toString()
@@ -92,35 +96,23 @@ export default function CadastrarClientePage() {
       .toString()
       .padStart(2, "0")}/${currentDate.getFullYear().toString()}`;
 
-    // Formata a data para "numero_nota" como "yyyy/mm/dd"
     const formattedNotaDate = `${currentDate.getFullYear()}${(
       currentDate.getMonth() + 1
     )
       .toString()
       .padStart(2, "0")}${currentDate.getDate().toString().padStart(2, "0")}`;
 
-    // Formatação do CPF
     const formattedCPF = formatCPF(formData.cpf);
-
-    // Formata os campos de telefone
     const formattedPhone1 = formatPhoneNumber(formData.telefone_1);
     const formattedPhone2 = formatPhoneNumber(formData.telefone_2);
-
-    // Formata o CEP
     const formattedCEP = formatCEP(formData.cep);
-
-    // Extrai os 3 últimos dígitos do CPF
     const cpfLastThree = formData.cpf.slice(-3);
-
-    // Gera dois números aleatórios entre 1 e 9
     const randomNumbers =
       Math.floor(Math.random() * 9 + 1).toString() +
       Math.floor(Math.random() * 9 + 1).toString();
 
-    // Gera o número de nota único
     const numeroNota = `${formattedNotaDate}${cpfLastThree}${randomNumbers}`;
 
-    // Atualiza o formData com a data de emissão, o CPF formatado, os telefones formatados e o número de nota
     const updatedFormData = {
       ...formData,
       data_emissao: formattedEmissaoDate,
@@ -131,7 +123,6 @@ export default function CadastrarClientePage() {
       cep: formattedCEP,
     };
 
-    // Envia os dados
     await postClienteAction(updatedFormData);
   };
 
@@ -226,10 +217,27 @@ export default function CadastrarClientePage() {
               required
             />
           </div>
+          {/* Input de Data de Emissão */}
           <div className="col-span-6 sm:col-span-6 md:col-span-3">
-            <label htmlFor="nome_receber" className="block text-gray-700">
-              Nome de quem irá receber a entrega
+            <label htmlFor="data_emissao" className="block text-gray-700">
+              Data de Entrega
             </label>
+            <input
+              type="date"
+              id="data_emissao"
+              name="data_emissao"
+              value={formData.data_emissao}
+              onChange={handleChange}
+              className="border border-gray-300 w-full p-3 rounded-md bg-gray-100 transition duration-200 focus:outline-none focus:border-red-500 focus:bg-white focus:shadow-outline"
+              required
+            />
+          </div>
+          <div className="col-span-6 sm:col-span-6 md:col-span-3">
+            {" "}
+            <label htmlFor="nome_receber" className="block text-gray-700">
+              {" "}
+              Nome de quem irá receber a entrega{" "}
+            </label>{" "}
             <input
               type="text"
               id="nome_receber"
@@ -238,12 +246,14 @@ export default function CadastrarClientePage() {
               onChange={handleChange}
               className="border border-gray-300 w-full p-3 rounded-md bg-gray-100 transition duration-200 focus:outline-none focus:border-red-500 focus:bg-white focus:shadow-outline"
               required
-            />
-          </div>
+            />{" "}
+          </div>{" "}
           <div className="col-span-6 sm:col-span-6 md:col-span-3">
+            {" "}
             <label htmlFor="rua" className="block text-gray-700">
-              Logradouro
-            </label>
+              {" "}
+              Logradouro{" "}
+            </label>{" "}
             <input
               type="text"
               id="rua"
@@ -252,12 +262,14 @@ export default function CadastrarClientePage() {
               onChange={handleChange}
               className="border border-gray-300 w-full p-3 rounded-md bg-gray-100 transition duration-200 focus:outline-none focus:border-red-500 focus:bg-white focus:shadow-outline"
               required
-            />
-          </div>
+            />{" "}
+          </div>{" "}
           <div className="col-span-6 sm:col-span-3 md:col-span-1">
+            {" "}
             <label htmlFor="numero" className="block text-gray-700">
-              Número
-            </label>
+              {" "}
+              Número{" "}
+            </label>{" "}
             <input
               type="text"
               id="numero"
@@ -266,12 +278,14 @@ export default function CadastrarClientePage() {
               onChange={handleChange}
               className="border border-gray-300 w-full p-3 rounded-md bg-gray-100 transition duration-200 focus:outline-none focus:border-red-500 focus:bg-white focus:shadow-outline"
               required
-            />
-          </div>
+            />{" "}
+          </div>{" "}
           <div className="col-span-6 sm:col-span-3 md:col-span-2">
+            {" "}
             <label htmlFor="bairro" className="block text-gray-700">
-              Bairro
-            </label>
+              {" "}
+              Bairro{" "}
+            </label>{" "}
             <input
               type="text"
               id="bairro"
@@ -280,12 +294,14 @@ export default function CadastrarClientePage() {
               onChange={handleChange}
               className="border border-gray-300 w-full p-3 rounded-md bg-gray-100 transition duration-200 focus:outline-none focus:border-red-500 focus:bg-white focus:shadow-outline"
               required
-            />
-          </div>
+            />{" "}
+          </div>{" "}
           <div className="col-span-6 sm:col-span-3 md:col-span-1">
+            {" "}
             <label htmlFor="cep" className="block text-gray-700">
-              CEP
-            </label>
+              {" "}
+              CEP{" "}
+            </label>{" "}
             <input
               type="text"
               id="cep"
@@ -294,12 +310,14 @@ export default function CadastrarClientePage() {
               onChange={handleChange}
               className="border border-gray-300 w-full p-3 rounded-md bg-gray-100 transition duration-200 focus:outline-none focus:border-red-500 focus:bg-white focus:shadow-outline"
               required
-            />
-          </div>
+            />{" "}
+          </div>{" "}
           <div className="col-span-6 sm:col-span-3 md:col-span-2">
+            {" "}
             <label htmlFor="cidade" className="block text-gray-700">
-              Cidade
-            </label>
+              {" "}
+              Cidade{" "}
+            </label>{" "}
             <input
               type="text"
               id="cidade"
@@ -308,12 +326,14 @@ export default function CadastrarClientePage() {
               onChange={handleChange}
               className="border border-gray-300 w-full p-3 rounded-md bg-gray-100 transition duration-200 focus:outline-none focus:border-red-500 focus:bg-white focus:shadow-outline"
               required
-            />
-          </div>
+            />{" "}
+          </div>{" "}
           <div className="col-span-6 sm:col-span-6 md:col-span-3">
+            {" "}
             <label htmlFor="ponto_referencia" className="block text-gray-700">
-              Ponto de Referência
-            </label>
+              {" "}
+              Ponto de Referência{" "}
+            </label>{" "}
             <input
               type="text"
               id="ponto_referencia"
@@ -321,12 +341,14 @@ export default function CadastrarClientePage() {
               value={formData.ponto_referencia}
               onChange={handleChange}
               className="border border-gray-300 w-full p-3 rounded-md bg-gray-100 transition duration-200 focus:outline-none focus:border-red-500 focus:bg-white focus:shadow-outline"
-            />
-          </div>
+            />{" "}
+          </div>{" "}
           <div className="col-span-6 sm:col-span-6 md:col-span-1">
+            {" "}
             <label htmlFor="obs" className="block text-gray-700">
-              Observação
-            </label>
+              {" "}
+              Observação{" "}
+            </label>{" "}
             <input
               type="text"
               id="obs"
@@ -334,12 +356,14 @@ export default function CadastrarClientePage() {
               value={formData.obs}
               onChange={handleChange}
               className="border border-gray-300 w-full p-3 rounded-md bg-gray-100 transition duration-200 focus:outline-none focus:border-red-500 focus:bg-white focus:shadow-outline"
-            />
-          </div>
+            />{" "}
+          </div>{" "}
           <div className="col-span-6 sm:col-span-6 md:col-span-2">
+            {" "}
             <label htmlFor="telefone_1" className="block text-gray-700">
-              Telefone 1
-            </label>
+              {" "}
+              Telefone 1{" "}
+            </label>{" "}
             <input
               type="text"
               id="telefone_1"
@@ -348,12 +372,14 @@ export default function CadastrarClientePage() {
               onChange={handleChange}
               className="border border-gray-300 w-full p-3 rounded-md bg-gray-100 transition duration-200 focus:outline-none focus:border-red-500 focus:bg-white focus:shadow-outline"
               required
-            />
-          </div>
+            />{" "}
+          </div>{" "}
           <div className="col-span-6 sm:col-span-6 md:col-span-2">
+            {" "}
             <label htmlFor="telefone_2" className="block text-gray-700">
-              Telefone 2
-            </label>
+              {" "}
+              Telefone 2{" "}
+            </label>{" "}
             <input
               type="text"
               id="telefone_2"
@@ -361,13 +387,14 @@ export default function CadastrarClientePage() {
               value={formData.telefone_2}
               onChange={handleChange}
               className="border border-gray-300 w-full p-3 rounded-md bg-gray-100 transition duration-200 focus:outline-none focus:border-red-500 focus:bg-white focus:shadow-outline"
-            />
-          </div>
-
+            />{" "}
+          </div>{" "}
           <div className="col-span-3 sm:col-span-3 md:col-span-1">
+            {" "}
             <label htmlFor="num_produtos" className="block text-gray-700">
-              Qtd de Produtos
-            </label>
+              {" "}
+              Qtd de Produtos{" "}
+            </label>{" "}
             <select
               id="num_produtos"
               name="num_produtos"
@@ -375,21 +402,21 @@ export default function CadastrarClientePage() {
               onChange={handleNumProdutosChange}
               className="border border-gray-300 w-full p-3 rounded-md bg-gray-100 transition duration-200 focus:outline-none focus:border-red-500 focus:bg-white focus:shadow-outline"
             >
-              <option value="1">1</option>
-              <option value="2">2</option>
-              <option value="3">3</option>
-              <option value="4">4</option>
-              <option value="5">5</option>
-            </select>
-          </div>
+              {" "}
+              <option value="1">1</option> <option value="2">2</option>{" "}
+              <option value="3">3</option> <option value="4">4</option>{" "}
+              <option value="5">5</option>{" "}
+            </select>{" "}
+          </div>{" "}
           {Array.from({ length: numProdutos }, (_, i) =>
             renderProdutoFields(i + 1)
-          )}
-
+          )}{" "}
           <div className="col-span-6 sm:col-span-6 md:col-span-2">
+            {" "}
             <label htmlFor="forma_pgto" className="block text-gray-700">
-              Forma de Pagamento
-            </label>
+              {" "}
+              Forma de Pagamento{" "}
+            </label>{" "}
             <select
               id="forma_pgto"
               name="forma_pgto"
@@ -397,23 +424,27 @@ export default function CadastrarClientePage() {
               onChange={handleChange}
               className="border border-gray-300 w-full p-3 rounded-md bg-gray-100 transition duration-200 focus:outline-none focus:border-red-500 focus:bg-white focus:shadow-outline"
             >
-              <option value={"Selecione"}>Selecione</option>
-              <option value={"Dinheiro"}>Dinheiro</option>
-              <option value={"Cartão de Crédito"}>Cartão de Crédito</option>
-              <option value={"Cartão de Débito"}>Cartão de Débito</option>
-              <option value={"Cartão | Pix"}>Cartão | Pix</option>
-              <option value={"Cartão | Dinheiro"}>Cartão | Dinheiro</option>
+              {" "}
+              <option value={"Selecione"}>Selecione</option>{" "}
+              <option value={"Dinheiro"}>Dinheiro</option>{" "}
+              <option value={"Cartão de Crédito"}>Cartão de Crédito</option>{" "}
+              <option value={"Cartão de Débito"}>Cartão de Débito</option>{" "}
+              <option value={"Cartão | Pix"}>Cartão | Pix</option>{" "}
+              <option value={"Cartão | Dinheiro"}>Cartão | Dinheiro</option>{" "}
               <option value={"Cartão Débito | Cartão Crédito"}>
-                Cartão Débito | Cartão Crédito
-              </option>
-              <option value={"Pix | Dinheiro "}>Pix | Dinheiro </option>
-              <option value={"Pix"}>Pix</option>
-            </select>
-          </div>
+                {" "}
+                Cartão Débito | Cartão Crédito{" "}
+              </option>{" "}
+              <option value={"Pix | Dinheiro "}>Pix | Dinheiro </option>{" "}
+              <option value={"Pix"}>Pix</option>{" "}
+            </select>{" "}
+          </div>{" "}
           <div className="col-span-3 sm:col-span-3 md:col-span-1">
+            {" "}
             <label htmlFor="numero_parcelas" className="block text-gray-700">
-              Nº de Parcelas
-            </label>
+              {" "}
+              Nº de Parcelas{" "}
+            </label>{" "}
             <select
               id="numero_parcelas"
               name="numero_parcelas"
@@ -421,24 +452,21 @@ export default function CadastrarClientePage() {
               onChange={handleChange}
               className="border border-gray-300 w-full p-3 rounded-md bg-gray-100 transition duration-200 focus:outline-none focus:border-red-500 focus:bg-white focus:shadow-outline"
             >
-              <option value="1">1</option>
-              <option value="2">2</option>
-              <option value="3">3</option>
-              <option value="4">4</option>
-              <option value="5">5</option>
-              <option value="6">6</option>
-              <option value="7">7</option>
-              <option value="8">8</option>
-              <option value="9">9</option>
-              <option value="10">10</option>
-              <option value="11">11</option>
-              <option value="12">12</option>
-            </select>
-          </div>
+              {" "}
+              <option value="1">1</option> <option value="2">2</option>{" "}
+              <option value="3">3</option> <option value="4">4</option>{" "}
+              <option value="5">5</option> <option value="6">6</option>{" "}
+              <option value="7">7</option> <option value="8">8</option>{" "}
+              <option value="9">9</option> <option value="10">10</option>{" "}
+              <option value="11">11</option> <option value="12">12</option>{" "}
+            </select>{" "}
+          </div>{" "}
           <div className="col-span-3 sm:col-span-3 md:col-span-1">
+            {" "}
             <label htmlFor="cpf" className="block text-gray-700">
-              CPF
-            </label>
+              {" "}
+              CPF{" "}
+            </label>{" "}
             <input
               type="text"
               id="cpf"
@@ -446,33 +474,36 @@ export default function CadastrarClientePage() {
               value={formData.cpf}
               onChange={handleChange}
               className="border border-gray-300 w-full p-3 rounded-md bg-gray-100 transition duration-200 focus:outline-none focus:border-red-500 focus:bg-white focus:shadow-outline"
-            />
-          </div>
+            />{" "}
+          </div>{" "}
           <div className="col-span-6 sm:col-span-6 md:col-span-2 flex gap-1">
+            {" "}
             <button
               type="reset"
               className="bg-red-700 text-white py-2 px-4 text-xl rounded transition duration-100 hover:bg-red-600 focus:outline-none focus:shadow-outline flex items-center gap-1"
             >
+              {" "}
               <Image
                 src="/assets/icones/18.svg"
                 alt="logotipo"
                 width={20}
                 height={20}
-              />
-              Resetar
-            </button>
+              />{" "}
+              Resetar{" "}
+            </button>{" "}
             <button
               type="submit"
               className="bg-green-700 text-white py-2 px-4 text-xl rounded transition duration-100 hover:bg-green-600 focus:outline-none focus:shadow-outline flex items-center gap-1"
             >
+              {" "}
               <Image
                 src="/assets/icones/19.svg"
                 alt="logotipo"
                 width={20}
                 height={20}
-              />
-              Cadastrar
-            </button>
+              />{" "}
+              Cadastrar{" "}
+            </button>{" "}
           </div>
         </form>
       </div>
