@@ -19,7 +19,8 @@ export default function SaveCliente({ cliente }) {
   // };
 
   // const telefoneFormatado = formatPhoneNumber(cliente.telefone_2);
-  const telefoneFormatado = 5521998404833;
+  const telefoneFormatado = 5522999405430;
+  const telefoneFormatado2 = 5521981225056;
 
   const total =
     (cliente.qtd_1 * cliente.subtotal_1 || 0) +
@@ -40,44 +41,73 @@ export default function SaveCliente({ cliente }) {
     : "Pagamento à vista";
 
   const produtos = [
-    cliente.produto_1 && `👉🏻 ${cliente.produto_1} (Qtd: ${cliente.qtd_1})`,
-    cliente.produto_2 && `👉🏻 ${cliente.produto_2} (Qtd: ${cliente.qtd_2})`,
-    cliente.produto_3 && `👉🏻 ${cliente.produto_3} (Qtd: ${cliente.qtd_3})`,
-    cliente.produto_4 && `👉🏻 ${cliente.produto_4} (Qtd: ${cliente.qtd_4})`,
-    cliente.produto_5 && `👉🏻 ${cliente.produto_5} (Qtd: ${cliente.qtd_5})`,
+    cliente.produto_1 && `👉🏻 ${cliente.desc_1} (Qtd: ${cliente.qtd_1})`,
+    cliente.produto_2 && `👉🏻 ${cliente.desc_2} (Qtd: ${cliente.qtd_2})`,
+    cliente.produto_3 && `👉🏻 ${cliente.desc_3} (Qtd: ${cliente.qtd_3})`,
+    cliente.produto_4 && `👉🏻 ${cliente.desc_4} (Qtd: ${cliente.qtd_4})`,
+    cliente.produto_5 && `👉🏻 ${cliente.desc_5} (Qtd: ${cliente.qtd_5})`,
   ]
     .filter(Boolean) // Remove entradas nulas ou falsas
     .join("\n");
 
   const whatsappMessage = `
+📃 *Nota Nº*
+👉🏻 ${cliente.numero_nota}
 
-    📃 Nota Nº
-    👉🏻 ${cliente.numero_nota}
+👩🏻‍🦱 *Cliente*
+👉🏻 ${cliente.nome}
+    
+📍 *Endereço*
+👉🏻 ${cliente.rua}, ${cliente.numero} - ${cliente.bairro} - ${cliente.cidade}
+    
+🚩 *Ponto de Referência*
+👉🏻 ${cliente.ponto_referencia}
+    
+☎️ *Telefones*
+👉🏻 ${cliente.telefone_1}
+👉🏻 ${cliente.telefone_2}
 
-    👩🏻‍🦱 Cliente
-    👉🏻 ${cliente.nome}
+📃 *Observações*
+👉🏻 ${cliente.obs}
     
-    📍 Endereço
-    👉🏻 ${cliente.rua}, ${cliente.numero} - ${cliente.bairro} - ${cliente.cidade}
-    
-    🚩 Ponto de Referência
-    👉🏻 ${cliente.ponto_referencia}
-    
-    ☎️ Telefones
-    👉🏻 ${cliente.telefone_1}
-    👉🏻 ${cliente.telefone_2}
-    
-    🛋️ Produtos
-    ${produtos}
+🛋️ *Produtos*
+${produtos}
 
-    💰 Forma de Pagamento
-    ${pagamento}
+💰 *Forma de Pagamento*
+${pagamento}
 
-    💰 Total
-    👉🏻 R$ ${total}`;
+💰 *Total*
+👉🏻 R$ ${total}`;
 
   const whatsappLink = `https://api.whatsapp.com/send?phone=${telefoneFormatado}&text=${encodeURIComponent(
     whatsappMessage
+  )}`;
+
+  const whatsappMessage2 = `
+📃 *Nota Nº*
+👉🏻 ${cliente.numero_nota}
+  
+👩🏻‍🦱 *Cliente*
+👉🏻 ${cliente.nome}
+      
+📍 *Endereço*
+👉🏻 ${cliente.rua}, ${cliente.numero} - ${cliente.bairro} - ${cliente.cidade}
+      
+🚩 *Ponto de Referência*
+👉🏻 ${cliente.ponto_referencia}
+      
+☎️ *Telefones*
+👉🏻 ${cliente.telefone_1}
+👉🏻 ${cliente.telefone_2}
+  
+📃 *Observações*
+👉🏻 ${cliente.obs}
+      
+🛋️ *Produtos*
+${produtos}`;
+
+  const whatsappLink2 = `https://api.whatsapp.com/send?phone=${telefoneFormatado2}&text=${encodeURIComponent(
+    whatsappMessage2
   )}`;
 
   useEffect(() => {
@@ -252,6 +282,13 @@ export default function SaveCliente({ cliente }) {
             </button>
             <a
               href={whatsappLink}
+              target="_blank"
+              className="bg-green-700 mx-2 text-white px-4 py-4 rounded-lg shadow hover:bg-green-600 transition-colors duration-300 gap-2"
+            >
+              Enviar Recebedor
+            </a>
+            <a
+              href={whatsappLink2}
               target="_blank"
               className="bg-green-700 mx-2 text-white px-4 py-4 rounded-lg shadow hover:bg-green-600 transition-colors duration-300 gap-2"
             >
